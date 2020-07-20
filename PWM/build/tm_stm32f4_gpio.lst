@@ -1,0 +1,1784 @@
+ARM GAS  /tmp/ccvVajHS.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"tm_stm32f4_gpio.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.TM_GPIO_SetPinAsInput,"ax",%progbits
+  18              		.align	1
+  19              		.global	TM_GPIO_SetPinAsInput
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	TM_GPIO_SetPinAsInput:
+  27              	.LVL0:
+  28              	.LFB133:
+  29              		.file 1 "Src/tm_stm32f4_gpio.c"
+   1:Src/tm_stm32f4_gpio.c **** /**	
+   2:Src/tm_stm32f4_gpio.c ****  * |----------------------------------------------------------------------
+   3:Src/tm_stm32f4_gpio.c ****  * | Copyright (C) Tilen Majerle, 2015
+   4:Src/tm_stm32f4_gpio.c ****  * | 
+   5:Src/tm_stm32f4_gpio.c ****  * | This program is free software: you can redistribute it and/or modify
+   6:Src/tm_stm32f4_gpio.c ****  * | it under the terms of the GNU General Public License as published by
+   7:Src/tm_stm32f4_gpio.c ****  * | the Free Software Foundation, either version 3 of the License, or
+   8:Src/tm_stm32f4_gpio.c ****  * | any later version.
+   9:Src/tm_stm32f4_gpio.c ****  * |  
+  10:Src/tm_stm32f4_gpio.c ****  * | This program is distributed in the hope that it will be useful,
+  11:Src/tm_stm32f4_gpio.c ****  * | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:Src/tm_stm32f4_gpio.c ****  * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:Src/tm_stm32f4_gpio.c ****  * | GNU General Public License for more details.
+  14:Src/tm_stm32f4_gpio.c ****  * | 
+  15:Src/tm_stm32f4_gpio.c ****  * | You should have received a copy of the GNU General Public License
+  16:Src/tm_stm32f4_gpio.c ****  * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:Src/tm_stm32f4_gpio.c ****  * |----------------------------------------------------------------------
+  18:Src/tm_stm32f4_gpio.c ****  */
+  19:Src/tm_stm32f4_gpio.c **** #include "tm_stm32f4_gpio.h"
+  20:Src/tm_stm32f4_gpio.c **** 
+  21:Src/tm_stm32f4_gpio.c **** /* Private function */
+  22:Src/tm_stm32f4_gpio.c **** static uint16_t GPIO_UsedPins[11] = {0,0,0,0,0,0,0,0,0,0,0};
+  23:Src/tm_stm32f4_gpio.c **** 
+  24:Src/tm_stm32f4_gpio.c **** /* Private functions */
+  25:Src/tm_stm32f4_gpio.c **** void TM_GPIO_INT_EnableClock(GPIO_TypeDef* GPIOx);
+  26:Src/tm_stm32f4_gpio.c **** void TM_GPIO_INT_DisableClock(GPIO_TypeDef* GPIOx);
+  27:Src/tm_stm32f4_gpio.c **** void TM_GPIO_INT_Init(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TM_GPIO_Mode_t GPIO_Mode, TM_GPIO_OTy
+  28:Src/tm_stm32f4_gpio.c **** 
+  29:Src/tm_stm32f4_gpio.c **** void TM_GPIO_Init(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TM_GPIO_Mode_t GPIO_Mode, TM_GPIO_OType_t
+ARM GAS  /tmp/ccvVajHS.s 			page 2
+
+
+  30:Src/tm_stm32f4_gpio.c **** 	/* Check input */
+  31:Src/tm_stm32f4_gpio.c **** 	if (GPIO_Pin == 0x00) {
+  32:Src/tm_stm32f4_gpio.c **** 		return;
+  33:Src/tm_stm32f4_gpio.c **** 	}
+  34:Src/tm_stm32f4_gpio.c **** 	
+  35:Src/tm_stm32f4_gpio.c **** 	/* Enable clock for GPIO */
+  36:Src/tm_stm32f4_gpio.c **** 	TM_GPIO_INT_EnableClock(GPIOx);
+  37:Src/tm_stm32f4_gpio.c **** 	
+  38:Src/tm_stm32f4_gpio.c **** 	/* Do initialization */
+  39:Src/tm_stm32f4_gpio.c **** 	TM_GPIO_INT_Init(GPIOx, GPIO_Pin, GPIO_Mode, GPIO_OType, GPIO_PuPd, GPIO_Speed);
+  40:Src/tm_stm32f4_gpio.c **** }
+  41:Src/tm_stm32f4_gpio.c **** 
+  42:Src/tm_stm32f4_gpio.c **** void TM_GPIO_InitAlternate(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TM_GPIO_OType_t GPIO_OType, TM_G
+  43:Src/tm_stm32f4_gpio.c **** 	uint32_t pinpos;
+  44:Src/tm_stm32f4_gpio.c **** 
+  45:Src/tm_stm32f4_gpio.c **** 	/* Check input */
+  46:Src/tm_stm32f4_gpio.c **** 	if (GPIO_Pin == 0x00) {
+  47:Src/tm_stm32f4_gpio.c **** 		return;
+  48:Src/tm_stm32f4_gpio.c **** 	}
+  49:Src/tm_stm32f4_gpio.c **** 	
+  50:Src/tm_stm32f4_gpio.c **** 	/* Enable GPIOx clock */
+  51:Src/tm_stm32f4_gpio.c **** 	TM_GPIO_INT_EnableClock(GPIOx);
+  52:Src/tm_stm32f4_gpio.c **** 	
+  53:Src/tm_stm32f4_gpio.c **** 	/* Set alternate functions for all pins */
+  54:Src/tm_stm32f4_gpio.c **** 	for (pinpos = 0; pinpos < 0x10; pinpos++) {
+  55:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+  56:Src/tm_stm32f4_gpio.c **** 		if ((GPIO_Pin & (1 << pinpos)) == 0) {
+  57:Src/tm_stm32f4_gpio.c **** 			continue;
+  58:Src/tm_stm32f4_gpio.c **** 		}
+  59:Src/tm_stm32f4_gpio.c **** 		
+  60:Src/tm_stm32f4_gpio.c **** 		/* Set alternate function */
+  61:Src/tm_stm32f4_gpio.c **** 		GPIOx->AFR[pinpos >> 0x03] = (GPIOx->AFR[pinpos >> 0x03] & ~(0x0F << (4 * (pinpos & 0x07)))) | (A
+  62:Src/tm_stm32f4_gpio.c **** 	}
+  63:Src/tm_stm32f4_gpio.c **** 	
+  64:Src/tm_stm32f4_gpio.c **** 	/* Do initialization */
+  65:Src/tm_stm32f4_gpio.c **** 	TM_GPIO_INT_Init(GPIOx, GPIO_Pin, TM_GPIO_Mode_AF, GPIO_OType, GPIO_PuPd, GPIO_Speed);
+  66:Src/tm_stm32f4_gpio.c **** }
+  67:Src/tm_stm32f4_gpio.c **** 
+  68:Src/tm_stm32f4_gpio.c **** void TM_GPIO_DeInit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+  69:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+  70:Src/tm_stm32f4_gpio.c **** 	uint8_t ptr = TM_GPIO_GetPortSource(GPIOx);
+  71:Src/tm_stm32f4_gpio.c **** 	
+  72:Src/tm_stm32f4_gpio.c **** 	/* Go through all pins */
+  73:Src/tm_stm32f4_gpio.c **** 	for (i = 0x00; i < 0x10; i++) {
+  74:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  75:Src/tm_stm32f4_gpio.c **** 		if (GPIO_Pin & (1 << i)) {
+  76:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+  77:Src/tm_stm32f4_gpio.c **** 			GPIOx->MODER |= (0x03 << (2 * i));
+  78:Src/tm_stm32f4_gpio.c **** 			
+  79:Src/tm_stm32f4_gpio.c **** 			/* Pin is not used */
+  80:Src/tm_stm32f4_gpio.c **** 			GPIO_UsedPins[ptr] &= ~(1 << i);
+  81:Src/tm_stm32f4_gpio.c **** 		}
+  82:Src/tm_stm32f4_gpio.c **** 	}
+  83:Src/tm_stm32f4_gpio.c **** }
+  84:Src/tm_stm32f4_gpio.c **** 
+  85:Src/tm_stm32f4_gpio.c **** void TM_GPIO_SetPinAsInput(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+  30              		.loc 1 85 68 view -0
+ARM GAS  /tmp/ccvVajHS.s 			page 3
+
+
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  86:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+  35              		.loc 1 86 2 view .LVU1
+  87:Src/tm_stm32f4_gpio.c **** 	/* Go through all pins */
+  88:Src/tm_stm32f4_gpio.c **** 	for (i = 0x00; i < 0x10; i++) {
+  36              		.loc 1 88 2 view .LVU2
+  37              		.loc 1 88 9 is_stmt 0 view .LVU3
+  38 0000 0023     		movs	r3, #0
+  39              		.loc 1 88 2 view .LVU4
+  40 0002 03E0     		b	.L6
+  41              	.LVL1:
+  42              	.L13:
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 8
+  45              		.cfi_offset 4, -8
+  46              		.cfi_offset 5, -4
+  89:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  90:Src/tm_stm32f4_gpio.c **** 		if (GPIO_Pin & (1 << i)) {
+  91:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+  92:Src/tm_stm32f4_gpio.c **** 			GPIOx->MODER &= ~(0x03 << (2 * i));
+  93:Src/tm_stm32f4_gpio.c **** 		}
+  94:Src/tm_stm32f4_gpio.c **** 	}
+  95:Src/tm_stm32f4_gpio.c **** }
+  47              		.loc 1 95 1 view .LVU5
+  48 0004 30BC     		pop	{r4, r5}
+  49              	.LCFI1:
+  50              		.cfi_restore 5
+  51              		.cfi_restore 4
+  52              		.cfi_def_cfa_offset 0
+  53 0006 7047     		bx	lr
+  54              	.L12:
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  55              		.loc 1 88 27 is_stmt 1 view .LVU6
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  56              		.loc 1 88 28 is_stmt 0 view .LVU7
+  57 0008 0133     		adds	r3, r3, #1
+  58              	.LVL2:
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  59              		.loc 1 88 28 view .LVU8
+  60 000a DBB2     		uxtb	r3, r3
+  61              	.LVL3:
+  62              	.L6:
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  63              		.loc 1 88 17 is_stmt 1 view .LVU9
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  64              		.loc 1 88 2 is_stmt 0 view .LVU10
+  65 000c 0F2B     		cmp	r3, #15
+  66 000e 16D8     		bhi	.L11
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+  67              		.loc 1 90 3 is_stmt 1 view .LVU11
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+  68              		.loc 1 90 7 is_stmt 0 view .LVU12
+  69 0010 41FA03F2 		asr	r2, r1, r3
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+ARM GAS  /tmp/ccvVajHS.s 			page 4
+
+
+  70              		.loc 1 90 6 view .LVU13
+  71 0014 12F0010F 		tst	r2, #1
+  72 0018 F6D0     		beq	.L12
+  85:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+  73              		.loc 1 85 68 view .LVU14
+  74 001a 30B4     		push	{r4, r5}
+  75              	.LCFI2:
+  76              		.cfi_def_cfa_offset 8
+  77              		.cfi_offset 4, -8
+  78              		.cfi_offset 5, -4
+  79              	.L7:
+  92:Src/tm_stm32f4_gpio.c **** 		}
+  80              		.loc 1 92 4 is_stmt 1 view .LVU15
+  92:Src/tm_stm32f4_gpio.c **** 		}
+  81              		.loc 1 92 17 is_stmt 0 view .LVU16
+  82 001c 0268     		ldr	r2, [r0]
+  92:Src/tm_stm32f4_gpio.c **** 		}
+  83              		.loc 1 92 33 view .LVU17
+  84 001e 5D00     		lsls	r5, r3, #1
+  92:Src/tm_stm32f4_gpio.c **** 		}
+  85              		.loc 1 92 27 view .LVU18
+  86 0020 0324     		movs	r4, #3
+  87 0022 AC40     		lsls	r4, r4, r5
+  92:Src/tm_stm32f4_gpio.c **** 		}
+  88              		.loc 1 92 17 view .LVU19
+  89 0024 22EA0402 		bic	r2, r2, r4
+  90 0028 0260     		str	r2, [r0]
+  91              	.L3:
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  92              		.loc 1 88 27 is_stmt 1 discriminator 2 view .LVU20
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  93              		.loc 1 88 28 is_stmt 0 discriminator 2 view .LVU21
+  94 002a 0133     		adds	r3, r3, #1
+  95              	.LVL4:
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  96              		.loc 1 88 28 discriminator 2 view .LVU22
+  97 002c DBB2     		uxtb	r3, r3
+  98              	.LVL5:
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+  99              		.loc 1 88 17 is_stmt 1 discriminator 2 view .LVU23
+  88:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 100              		.loc 1 88 2 is_stmt 0 discriminator 2 view .LVU24
+ 101 002e 0F2B     		cmp	r3, #15
+ 102 0030 E8D8     		bhi	.L13
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+ 103              		.loc 1 90 3 is_stmt 1 view .LVU25
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+ 104              		.loc 1 90 7 is_stmt 0 view .LVU26
+ 105 0032 41FA03F2 		asr	r2, r1, r3
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+ 106              		.loc 1 90 6 view .LVU27
+ 107 0036 12F0010F 		tst	r2, #1
+ 108 003a F6D0     		beq	.L3
+ 109 003c EEE7     		b	.L7
+ 110              	.L11:
+ 111              	.LCFI3:
+ 112              		.cfi_def_cfa_offset 0
+ARM GAS  /tmp/ccvVajHS.s 			page 5
+
+
+ 113              		.cfi_restore 4
+ 114              		.cfi_restore 5
+  90:Src/tm_stm32f4_gpio.c **** 			/* Set 00 bits combination for input */
+ 115              		.loc 1 90 6 view .LVU28
+ 116 003e 7047     		bx	lr
+ 117              		.cfi_endproc
+ 118              	.LFE133:
+ 120              		.section	.text.TM_GPIO_SetPinAsOutput,"ax",%progbits
+ 121              		.align	1
+ 122              		.global	TM_GPIO_SetPinAsOutput
+ 123              		.syntax unified
+ 124              		.thumb
+ 125              		.thumb_func
+ 126              		.fpu fpv4-sp-d16
+ 128              	TM_GPIO_SetPinAsOutput:
+ 129              	.LVL6:
+ 130              	.LFB134:
+  96:Src/tm_stm32f4_gpio.c **** 
+  97:Src/tm_stm32f4_gpio.c **** void TM_GPIO_SetPinAsOutput(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+ 131              		.loc 1 97 69 is_stmt 1 view -0
+ 132              		.cfi_startproc
+ 133              		@ args = 0, pretend = 0, frame = 0
+ 134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135              		@ link register save eliminated.
+  98:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 136              		.loc 1 98 2 view .LVU30
+  99:Src/tm_stm32f4_gpio.c **** 	/* Go through all pins */
+ 100:Src/tm_stm32f4_gpio.c **** 	for (i = 0x00; i < 0x10; i++) {
+ 137              		.loc 1 100 2 view .LVU31
+ 138              		.loc 1 100 9 is_stmt 0 view .LVU32
+ 139 0000 0023     		movs	r3, #0
+ 140              		.loc 1 100 2 view .LVU33
+ 141 0002 03E0     		b	.L19
+ 142              	.LVL7:
+ 143              	.L26:
+ 144              	.LCFI4:
+ 145              		.cfi_def_cfa_offset 12
+ 146              		.cfi_offset 4, -12
+ 147              		.cfi_offset 5, -8
+ 148              		.cfi_offset 6, -4
+ 101:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 102:Src/tm_stm32f4_gpio.c **** 		if (GPIO_Pin & (1 << i)) {
+ 103:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 104:Src/tm_stm32f4_gpio.c **** 			GPIOx->MODER = (GPIOx->MODER & ~(0x03 << (2 * i))) | (0x01 << (2 * i));
+ 105:Src/tm_stm32f4_gpio.c **** 		}
+ 106:Src/tm_stm32f4_gpio.c **** 	}
+ 107:Src/tm_stm32f4_gpio.c **** }
+ 149              		.loc 1 107 1 view .LVU34
+ 150 0004 70BC     		pop	{r4, r5, r6}
+ 151              	.LCFI5:
+ 152              		.cfi_restore 6
+ 153              		.cfi_restore 5
+ 154              		.cfi_restore 4
+ 155              		.cfi_def_cfa_offset 0
+ 156 0006 7047     		bx	lr
+ 157              	.L25:
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ARM GAS  /tmp/ccvVajHS.s 			page 6
+
+
+ 158              		.loc 1 100 27 is_stmt 1 view .LVU35
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 159              		.loc 1 100 28 is_stmt 0 view .LVU36
+ 160 0008 0133     		adds	r3, r3, #1
+ 161              	.LVL8:
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 162              		.loc 1 100 28 view .LVU37
+ 163 000a DBB2     		uxtb	r3, r3
+ 164              	.LVL9:
+ 165              	.L19:
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 166              		.loc 1 100 17 is_stmt 1 view .LVU38
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 167              		.loc 1 100 2 is_stmt 0 view .LVU39
+ 168 000c 0F2B     		cmp	r3, #15
+ 169 000e 19D8     		bhi	.L24
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 170              		.loc 1 102 3 is_stmt 1 view .LVU40
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 171              		.loc 1 102 7 is_stmt 0 view .LVU41
+ 172 0010 41FA03F2 		asr	r2, r1, r3
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 173              		.loc 1 102 6 view .LVU42
+ 174 0014 12F0010F 		tst	r2, #1
+ 175 0018 F6D0     		beq	.L25
+  97:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 176              		.loc 1 97 69 view .LVU43
+ 177 001a 70B4     		push	{r4, r5, r6}
+ 178              	.LCFI6:
+ 179              		.cfi_def_cfa_offset 12
+ 180              		.cfi_offset 4, -12
+ 181              		.cfi_offset 5, -8
+ 182              		.cfi_offset 6, -4
+ 183              	.L20:
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 184              		.loc 1 104 4 is_stmt 1 view .LVU44
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 185              		.loc 1 104 25 is_stmt 0 view .LVU45
+ 186 001c 0268     		ldr	r2, [r0]
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 187              		.loc 1 104 48 view .LVU46
+ 188 001e 5E00     		lsls	r6, r3, #1
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 189              		.loc 1 104 42 view .LVU47
+ 190 0020 0325     		movs	r5, #3
+ 191 0022 B540     		lsls	r5, r5, r6
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 192              		.loc 1 104 33 view .LVU48
+ 193 0024 22EA0502 		bic	r2, r2, r5
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 194              		.loc 1 104 63 view .LVU49
+ 195 0028 0124     		movs	r4, #1
+ 196 002a B440     		lsls	r4, r4, r6
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ 197              		.loc 1 104 55 view .LVU50
+ 198 002c 2243     		orrs	r2, r2, r4
+ 104:Src/tm_stm32f4_gpio.c **** 		}
+ARM GAS  /tmp/ccvVajHS.s 			page 7
+
+
+ 199              		.loc 1 104 17 view .LVU51
+ 200 002e 0260     		str	r2, [r0]
+ 201              	.L16:
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 202              		.loc 1 100 27 is_stmt 1 discriminator 2 view .LVU52
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 203              		.loc 1 100 28 is_stmt 0 discriminator 2 view .LVU53
+ 204 0030 0133     		adds	r3, r3, #1
+ 205              	.LVL10:
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 206              		.loc 1 100 28 discriminator 2 view .LVU54
+ 207 0032 DBB2     		uxtb	r3, r3
+ 208              	.LVL11:
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 209              		.loc 1 100 17 is_stmt 1 discriminator 2 view .LVU55
+ 100:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 210              		.loc 1 100 2 is_stmt 0 discriminator 2 view .LVU56
+ 211 0034 0F2B     		cmp	r3, #15
+ 212 0036 E5D8     		bhi	.L26
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 213              		.loc 1 102 3 is_stmt 1 view .LVU57
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 214              		.loc 1 102 7 is_stmt 0 view .LVU58
+ 215 0038 41FA03F2 		asr	r2, r1, r3
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 216              		.loc 1 102 6 view .LVU59
+ 217 003c 12F0010F 		tst	r2, #1
+ 218 0040 F6D0     		beq	.L16
+ 219 0042 EBE7     		b	.L20
+ 220              	.L24:
+ 221              	.LCFI7:
+ 222              		.cfi_def_cfa_offset 0
+ 223              		.cfi_restore 4
+ 224              		.cfi_restore 5
+ 225              		.cfi_restore 6
+ 102:Src/tm_stm32f4_gpio.c **** 			/* Set 01 bits combination for output */
+ 226              		.loc 1 102 6 view .LVU60
+ 227 0044 7047     		bx	lr
+ 228              		.cfi_endproc
+ 229              	.LFE134:
+ 231              		.section	.text.TM_GPIO_SetPinAsAnalog,"ax",%progbits
+ 232              		.align	1
+ 233              		.global	TM_GPIO_SetPinAsAnalog
+ 234              		.syntax unified
+ 235              		.thumb
+ 236              		.thumb_func
+ 237              		.fpu fpv4-sp-d16
+ 239              	TM_GPIO_SetPinAsAnalog:
+ 240              	.LVL12:
+ 241              	.LFB135:
+ 108:Src/tm_stm32f4_gpio.c **** 
+ 109:Src/tm_stm32f4_gpio.c **** void TM_GPIO_SetPinAsAnalog(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+ 242              		.loc 1 109 69 is_stmt 1 view -0
+ 243              		.cfi_startproc
+ 244              		@ args = 0, pretend = 0, frame = 0
+ 245              		@ frame_needed = 0, uses_anonymous_args = 0
+ 246              		@ link register save eliminated.
+ARM GAS  /tmp/ccvVajHS.s 			page 8
+
+
+ 110:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 247              		.loc 1 110 2 view .LVU62
+ 111:Src/tm_stm32f4_gpio.c **** 	/* Go through all pins */
+ 112:Src/tm_stm32f4_gpio.c **** 	for (i = 0x00; i < 0x10; i++) {
+ 248              		.loc 1 112 2 view .LVU63
+ 249              		.loc 1 112 9 is_stmt 0 view .LVU64
+ 250 0000 0023     		movs	r3, #0
+ 251              		.loc 1 112 2 view .LVU65
+ 252 0002 03E0     		b	.L32
+ 253              	.LVL13:
+ 254              	.L39:
+ 255              	.LCFI8:
+ 256              		.cfi_def_cfa_offset 8
+ 257              		.cfi_offset 4, -8
+ 258              		.cfi_offset 5, -4
+ 113:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 114:Src/tm_stm32f4_gpio.c **** 		if (GPIO_Pin & (1 << i)) {
+ 115:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 116:Src/tm_stm32f4_gpio.c **** 			GPIOx->MODER |= (0x03 << (2 * i));
+ 117:Src/tm_stm32f4_gpio.c **** 		}
+ 118:Src/tm_stm32f4_gpio.c **** 	}
+ 119:Src/tm_stm32f4_gpio.c **** }
+ 259              		.loc 1 119 1 view .LVU66
+ 260 0004 30BC     		pop	{r4, r5}
+ 261              	.LCFI9:
+ 262              		.cfi_restore 5
+ 263              		.cfi_restore 4
+ 264              		.cfi_def_cfa_offset 0
+ 265 0006 7047     		bx	lr
+ 266              	.L38:
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 267              		.loc 1 112 27 is_stmt 1 view .LVU67
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 268              		.loc 1 112 28 is_stmt 0 view .LVU68
+ 269 0008 0133     		adds	r3, r3, #1
+ 270              	.LVL14:
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 271              		.loc 1 112 28 view .LVU69
+ 272 000a DBB2     		uxtb	r3, r3
+ 273              	.LVL15:
+ 274              	.L32:
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 275              		.loc 1 112 17 is_stmt 1 view .LVU70
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 276              		.loc 1 112 2 is_stmt 0 view .LVU71
+ 277 000c 0F2B     		cmp	r3, #15
+ 278 000e 15D8     		bhi	.L37
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 279              		.loc 1 114 3 is_stmt 1 view .LVU72
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 280              		.loc 1 114 7 is_stmt 0 view .LVU73
+ 281 0010 41FA03F2 		asr	r2, r1, r3
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 282              		.loc 1 114 6 view .LVU74
+ 283 0014 12F0010F 		tst	r2, #1
+ 284 0018 F6D0     		beq	.L38
+ 109:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ARM GAS  /tmp/ccvVajHS.s 			page 9
+
+
+ 285              		.loc 1 109 69 view .LVU75
+ 286 001a 30B4     		push	{r4, r5}
+ 287              	.LCFI10:
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 4, -8
+ 290              		.cfi_offset 5, -4
+ 291              	.L33:
+ 116:Src/tm_stm32f4_gpio.c **** 		}
+ 292              		.loc 1 116 4 is_stmt 1 view .LVU76
+ 116:Src/tm_stm32f4_gpio.c **** 		}
+ 293              		.loc 1 116 17 is_stmt 0 view .LVU77
+ 294 001c 0268     		ldr	r2, [r0]
+ 116:Src/tm_stm32f4_gpio.c **** 		}
+ 295              		.loc 1 116 32 view .LVU78
+ 296 001e 5D00     		lsls	r5, r3, #1
+ 116:Src/tm_stm32f4_gpio.c **** 		}
+ 297              		.loc 1 116 26 view .LVU79
+ 298 0020 0324     		movs	r4, #3
+ 299 0022 AC40     		lsls	r4, r4, r5
+ 116:Src/tm_stm32f4_gpio.c **** 		}
+ 300              		.loc 1 116 17 view .LVU80
+ 301 0024 2243     		orrs	r2, r2, r4
+ 302 0026 0260     		str	r2, [r0]
+ 303              	.L29:
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 304              		.loc 1 112 27 is_stmt 1 discriminator 2 view .LVU81
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 305              		.loc 1 112 28 is_stmt 0 discriminator 2 view .LVU82
+ 306 0028 0133     		adds	r3, r3, #1
+ 307              	.LVL16:
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 308              		.loc 1 112 28 discriminator 2 view .LVU83
+ 309 002a DBB2     		uxtb	r3, r3
+ 310              	.LVL17:
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 311              		.loc 1 112 17 is_stmt 1 discriminator 2 view .LVU84
+ 112:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 312              		.loc 1 112 2 is_stmt 0 discriminator 2 view .LVU85
+ 313 002c 0F2B     		cmp	r3, #15
+ 314 002e E9D8     		bhi	.L39
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 315              		.loc 1 114 3 is_stmt 1 view .LVU86
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 316              		.loc 1 114 7 is_stmt 0 view .LVU87
+ 317 0030 41FA03F2 		asr	r2, r1, r3
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 318              		.loc 1 114 6 view .LVU88
+ 319 0034 12F0010F 		tst	r2, #1
+ 320 0038 F6D0     		beq	.L29
+ 321 003a EFE7     		b	.L33
+ 322              	.L37:
+ 323              	.LCFI11:
+ 324              		.cfi_def_cfa_offset 0
+ 325              		.cfi_restore 4
+ 326              		.cfi_restore 5
+ 114:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 327              		.loc 1 114 6 view .LVU89
+ARM GAS  /tmp/ccvVajHS.s 			page 10
+
+
+ 328 003c 7047     		bx	lr
+ 329              		.cfi_endproc
+ 330              	.LFE135:
+ 332              		.section	.text.TM_GPIO_SetPinAsAlternate,"ax",%progbits
+ 333              		.align	1
+ 334              		.global	TM_GPIO_SetPinAsAlternate
+ 335              		.syntax unified
+ 336              		.thumb
+ 337              		.thumb_func
+ 338              		.fpu fpv4-sp-d16
+ 340              	TM_GPIO_SetPinAsAlternate:
+ 341              	.LVL18:
+ 342              	.LFB136:
+ 120:Src/tm_stm32f4_gpio.c **** 
+ 121:Src/tm_stm32f4_gpio.c **** void TM_GPIO_SetPinAsAlternate(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+ 343              		.loc 1 121 72 is_stmt 1 view -0
+ 344              		.cfi_startproc
+ 345              		@ args = 0, pretend = 0, frame = 0
+ 346              		@ frame_needed = 0, uses_anonymous_args = 0
+ 347              		@ link register save eliminated.
+ 122:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 348              		.loc 1 122 2 view .LVU91
+ 123:Src/tm_stm32f4_gpio.c **** 	
+ 124:Src/tm_stm32f4_gpio.c **** 	/* Set alternate functions for all pins */
+ 125:Src/tm_stm32f4_gpio.c **** 	for (i = 0; i < 0x10; i++) {
+ 349              		.loc 1 125 2 view .LVU92
+ 350              		.loc 1 125 9 is_stmt 0 view .LVU93
+ 351 0000 0023     		movs	r3, #0
+ 352              		.loc 1 125 2 view .LVU94
+ 353 0002 03E0     		b	.L45
+ 354              	.LVL19:
+ 355              	.L52:
+ 356              	.LCFI12:
+ 357              		.cfi_def_cfa_offset 12
+ 358              		.cfi_offset 4, -12
+ 359              		.cfi_offset 5, -8
+ 360              		.cfi_offset 6, -4
+ 126:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 127:Src/tm_stm32f4_gpio.c **** 		if ((GPIO_Pin & (1 << i)) == 0) {
+ 128:Src/tm_stm32f4_gpio.c **** 			continue;
+ 129:Src/tm_stm32f4_gpio.c **** 		}
+ 130:Src/tm_stm32f4_gpio.c **** 		
+ 131:Src/tm_stm32f4_gpio.c **** 		/* Set alternate mode */
+ 132:Src/tm_stm32f4_gpio.c **** 		GPIOx->MODER = (GPIOx->MODER & ~(0x03 << (2 * i))) | (0x02 << (2 * i));
+ 133:Src/tm_stm32f4_gpio.c **** 	}
+ 134:Src/tm_stm32f4_gpio.c **** }
+ 361              		.loc 1 134 1 view .LVU95
+ 362 0004 70BC     		pop	{r4, r5, r6}
+ 363              	.LCFI13:
+ 364              		.cfi_restore 6
+ 365              		.cfi_restore 5
+ 366              		.cfi_restore 4
+ 367              		.cfi_def_cfa_offset 0
+ 368 0006 7047     		bx	lr
+ 369              	.L51:
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 370              		.loc 1 125 24 is_stmt 1 view .LVU96
+ARM GAS  /tmp/ccvVajHS.s 			page 11
+
+
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 371              		.loc 1 125 25 is_stmt 0 view .LVU97
+ 372 0008 0133     		adds	r3, r3, #1
+ 373              	.LVL20:
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 374              		.loc 1 125 25 view .LVU98
+ 375 000a DBB2     		uxtb	r3, r3
+ 376              	.LVL21:
+ 377              	.L45:
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 378              		.loc 1 125 14 is_stmt 1 view .LVU99
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 379              		.loc 1 125 2 is_stmt 0 view .LVU100
+ 380 000c 0F2B     		cmp	r3, #15
+ 381 000e 19D8     		bhi	.L50
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 382              		.loc 1 127 3 is_stmt 1 view .LVU101
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 383              		.loc 1 127 29 is_stmt 0 view .LVU102
+ 384 0010 41FA03F2 		asr	r2, r1, r3
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 385              		.loc 1 127 6 view .LVU103
+ 386 0014 12F0010F 		tst	r2, #1
+ 387 0018 F6D0     		beq	.L51
+ 121:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 388              		.loc 1 121 72 view .LVU104
+ 389 001a 70B4     		push	{r4, r5, r6}
+ 390              	.LCFI14:
+ 391              		.cfi_def_cfa_offset 12
+ 392              		.cfi_offset 4, -12
+ 393              		.cfi_offset 5, -8
+ 394              		.cfi_offset 6, -4
+ 395              	.L47:
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 396              		.loc 1 132 3 is_stmt 1 view .LVU105
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 397              		.loc 1 132 24 is_stmt 0 view .LVU106
+ 398 001c 0268     		ldr	r2, [r0]
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 399              		.loc 1 132 47 view .LVU107
+ 400 001e 5E00     		lsls	r6, r3, #1
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 401              		.loc 1 132 41 view .LVU108
+ 402 0020 0325     		movs	r5, #3
+ 403 0022 B540     		lsls	r5, r5, r6
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 404              		.loc 1 132 32 view .LVU109
+ 405 0024 22EA0502 		bic	r2, r2, r5
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 406              		.loc 1 132 62 view .LVU110
+ 407 0028 0224     		movs	r4, #2
+ 408 002a B440     		lsls	r4, r4, r6
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 409              		.loc 1 132 54 view .LVU111
+ 410 002c 2243     		orrs	r2, r2, r4
+ 132:Src/tm_stm32f4_gpio.c **** 	}
+ 411              		.loc 1 132 16 view .LVU112
+ARM GAS  /tmp/ccvVajHS.s 			page 12
+
+
+ 412 002e 0260     		str	r2, [r0]
+ 413              	.L42:
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 414              		.loc 1 125 24 is_stmt 1 discriminator 2 view .LVU113
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 415              		.loc 1 125 25 is_stmt 0 discriminator 2 view .LVU114
+ 416 0030 0133     		adds	r3, r3, #1
+ 417              	.LVL22:
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 418              		.loc 1 125 25 discriminator 2 view .LVU115
+ 419 0032 DBB2     		uxtb	r3, r3
+ 420              	.LVL23:
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 421              		.loc 1 125 14 is_stmt 1 discriminator 2 view .LVU116
+ 125:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 422              		.loc 1 125 2 is_stmt 0 discriminator 2 view .LVU117
+ 423 0034 0F2B     		cmp	r3, #15
+ 424 0036 E5D8     		bhi	.L52
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 425              		.loc 1 127 3 is_stmt 1 view .LVU118
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 426              		.loc 1 127 29 is_stmt 0 view .LVU119
+ 427 0038 41FA03F2 		asr	r2, r1, r3
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 428              		.loc 1 127 6 view .LVU120
+ 429 003c 12F0010F 		tst	r2, #1
+ 430 0040 ECD1     		bne	.L47
+ 431 0042 F5E7     		b	.L42
+ 432              	.L50:
+ 433              	.LCFI15:
+ 434              		.cfi_def_cfa_offset 0
+ 435              		.cfi_restore 4
+ 436              		.cfi_restore 5
+ 437              		.cfi_restore 6
+ 127:Src/tm_stm32f4_gpio.c **** 			continue;
+ 438              		.loc 1 127 6 view .LVU121
+ 439 0044 7047     		bx	lr
+ 440              		.cfi_endproc
+ 441              	.LFE136:
+ 443              		.section	.text.TM_GPIO_SetPullResistor,"ax",%progbits
+ 444              		.align	1
+ 445              		.global	TM_GPIO_SetPullResistor
+ 446              		.syntax unified
+ 447              		.thumb
+ 448              		.thumb_func
+ 449              		.fpu fpv4-sp-d16
+ 451              	TM_GPIO_SetPullResistor:
+ 452              	.LVL24:
+ 453              	.LFB137:
+ 135:Src/tm_stm32f4_gpio.c **** 
+ 136:Src/tm_stm32f4_gpio.c **** void TM_GPIO_SetPullResistor(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TM_GPIO_PuPd_t GPIO_PuPd) {
+ 454              		.loc 1 136 96 is_stmt 1 view -0
+ 455              		.cfi_startproc
+ 456              		@ args = 0, pretend = 0, frame = 0
+ 457              		@ frame_needed = 0, uses_anonymous_args = 0
+ 458              		@ link register save eliminated.
+ 137:Src/tm_stm32f4_gpio.c **** 	uint8_t pinpos;
+ARM GAS  /tmp/ccvVajHS.s 			page 13
+
+
+ 459              		.loc 1 137 2 view .LVU123
+ 138:Src/tm_stm32f4_gpio.c **** 	
+ 139:Src/tm_stm32f4_gpio.c **** 	/* Go through all pins */
+ 140:Src/tm_stm32f4_gpio.c **** 	for (pinpos = 0; pinpos < 0x10; pinpos++) {
+ 460              		.loc 1 140 2 view .LVU124
+ 461              		.loc 1 140 14 is_stmt 0 view .LVU125
+ 462 0000 0023     		movs	r3, #0
+ 463              	.LVL25:
+ 464              		.loc 1 140 19 is_stmt 1 view .LVU126
+ 465              		.loc 1 140 2 is_stmt 0 view .LVU127
+ 466 0002 0F2B     		cmp	r3, #15
+ 467 0004 17D8     		bhi	.L60
+ 136:Src/tm_stm32f4_gpio.c **** 	uint8_t pinpos;
+ 468              		.loc 1 136 96 view .LVU128
+ 469 0006 70B4     		push	{r4, r5, r6}
+ 470              	.LCFI16:
+ 471              		.cfi_def_cfa_offset 12
+ 472              		.cfi_offset 4, -12
+ 473              		.cfi_offset 5, -8
+ 474              		.cfi_offset 6, -4
+ 475 0008 03E0     		b	.L56
+ 476              	.L55:
+ 477              		.loc 1 140 34 is_stmt 1 discriminator 2 view .LVU129
+ 478              		.loc 1 140 40 is_stmt 0 discriminator 2 view .LVU130
+ 479 000a 0133     		adds	r3, r3, #1
+ 480              	.LVL26:
+ 481              		.loc 1 140 40 discriminator 2 view .LVU131
+ 482 000c DBB2     		uxtb	r3, r3
+ 483              	.LVL27:
+ 484              		.loc 1 140 19 is_stmt 1 discriminator 2 view .LVU132
+ 485              		.loc 1 140 2 is_stmt 0 discriminator 2 view .LVU133
+ 486 000e 0F2B     		cmp	r3, #15
+ 487 0010 0FD8     		bhi	.L61
+ 488              	.L56:
+ 141:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 142:Src/tm_stm32f4_gpio.c **** 		if ((GPIO_Pin & (1 << pinpos)) == 0) {
+ 489              		.loc 1 142 3 is_stmt 1 view .LVU134
+ 490              		.loc 1 142 34 is_stmt 0 view .LVU135
+ 491 0012 41FA03F4 		asr	r4, r1, r3
+ 492              		.loc 1 142 6 view .LVU136
+ 493 0016 14F0010F 		tst	r4, #1
+ 494 001a F6D0     		beq	.L55
+ 143:Src/tm_stm32f4_gpio.c **** 			continue;
+ 144:Src/tm_stm32f4_gpio.c **** 		}
+ 145:Src/tm_stm32f4_gpio.c **** 
+ 146:Src/tm_stm32f4_gpio.c **** 		/* Set GPIO PUPD register */
+ 147:Src/tm_stm32f4_gpio.c **** 		GPIOx->PUPDR = (GPIOx->PUPDR & ~(0x03 << (2 * pinpos))) | ((uint32_t)(GPIO_PuPd << (2 * pinpos)))
+ 495              		.loc 1 147 3 is_stmt 1 view .LVU137
+ 496              		.loc 1 147 24 is_stmt 0 view .LVU138
+ 497 001c C468     		ldr	r4, [r0, #12]
+ 498              		.loc 1 147 47 view .LVU139
+ 499 001e 5D00     		lsls	r5, r3, #1
+ 500              		.loc 1 147 41 view .LVU140
+ 501 0020 0326     		movs	r6, #3
+ 502 0022 AE40     		lsls	r6, r6, r5
+ 503              		.loc 1 147 32 view .LVU141
+ 504 0024 24EA0604 		bic	r4, r4, r6
+ARM GAS  /tmp/ccvVajHS.s 			page 14
+
+
+ 505              		.loc 1 147 83 view .LVU142
+ 506 0028 02FA05F5 		lsl	r5, r2, r5
+ 507              		.loc 1 147 59 view .LVU143
+ 508 002c 2C43     		orrs	r4, r4, r5
+ 509              		.loc 1 147 16 view .LVU144
+ 510 002e C460     		str	r4, [r0, #12]
+ 511 0030 EBE7     		b	.L55
+ 512              	.L61:
+ 148:Src/tm_stm32f4_gpio.c **** 	}
+ 149:Src/tm_stm32f4_gpio.c **** }
+ 513              		.loc 1 149 1 view .LVU145
+ 514 0032 70BC     		pop	{r4, r5, r6}
+ 515              	.LCFI17:
+ 516              		.cfi_restore 6
+ 517              		.cfi_restore 5
+ 518              		.cfi_restore 4
+ 519              		.cfi_def_cfa_offset 0
+ 520 0034 7047     		bx	lr
+ 521              	.L60:
+ 522              		.loc 1 149 1 view .LVU146
+ 523 0036 7047     		bx	lr
+ 524              		.cfi_endproc
+ 525              	.LFE137:
+ 527              		.section	.text.TM_GPIO_Lock,"ax",%progbits
+ 528              		.align	1
+ 529              		.global	TM_GPIO_Lock
+ 530              		.syntax unified
+ 531              		.thumb
+ 532              		.thumb_func
+ 533              		.fpu fpv4-sp-d16
+ 535              	TM_GPIO_Lock:
+ 536              	.LVL28:
+ 537              	.LFB138:
+ 150:Src/tm_stm32f4_gpio.c **** 
+ 151:Src/tm_stm32f4_gpio.c **** void TM_GPIO_Lock(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+ 538              		.loc 1 151 59 is_stmt 1 view -0
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 0
+ 541              		@ frame_needed = 0, uses_anonymous_args = 0
+ 542              		@ link register save eliminated.
+ 152:Src/tm_stm32f4_gpio.c **** 	uint32_t d;
+ 543              		.loc 1 152 2 view .LVU148
+ 153:Src/tm_stm32f4_gpio.c **** 	
+ 154:Src/tm_stm32f4_gpio.c **** 	/* Set GPIO pin with 16th bit set to 1 */
+ 155:Src/tm_stm32f4_gpio.c **** 	d = 0x00010000 | GPIO_Pin;
+ 544              		.loc 1 155 2 view .LVU149
+ 545              		.loc 1 155 17 is_stmt 0 view .LVU150
+ 546 0000 41F48033 		orr	r3, r1, #65536
+ 547              	.LVL29:
+ 156:Src/tm_stm32f4_gpio.c **** 	
+ 157:Src/tm_stm32f4_gpio.c **** 	/* Write to LCKR register */
+ 158:Src/tm_stm32f4_gpio.c **** 	GPIOx->LCKR = d;
+ 548              		.loc 1 158 2 is_stmt 1 view .LVU151
+ 549              		.loc 1 158 14 is_stmt 0 view .LVU152
+ 550 0004 C361     		str	r3, [r0, #28]
+ 159:Src/tm_stm32f4_gpio.c **** 	GPIOx->LCKR = GPIO_Pin;
+ 551              		.loc 1 159 2 is_stmt 1 view .LVU153
+ARM GAS  /tmp/ccvVajHS.s 			page 15
+
+
+ 552              		.loc 1 159 14 is_stmt 0 view .LVU154
+ 553 0006 C161     		str	r1, [r0, #28]
+ 160:Src/tm_stm32f4_gpio.c **** 	GPIOx->LCKR = d;
+ 554              		.loc 1 160 2 is_stmt 1 view .LVU155
+ 555              		.loc 1 160 14 is_stmt 0 view .LVU156
+ 556 0008 C361     		str	r3, [r0, #28]
+ 161:Src/tm_stm32f4_gpio.c **** 	
+ 162:Src/tm_stm32f4_gpio.c **** 	/* Read twice */
+ 163:Src/tm_stm32f4_gpio.c **** 	(void)GPIOx->LCKR;
+ 557              		.loc 1 163 2 is_stmt 1 view .LVU157
+ 558 000a C369     		ldr	r3, [r0, #28]
+ 559              	.LVL30:
+ 164:Src/tm_stm32f4_gpio.c **** 	(void)GPIOx->LCKR;
+ 560              		.loc 1 164 2 view .LVU158
+ 561 000c C369     		ldr	r3, [r0, #28]
+ 165:Src/tm_stm32f4_gpio.c **** }
+ 562              		.loc 1 165 1 is_stmt 0 view .LVU159
+ 563 000e 7047     		bx	lr
+ 564              		.cfi_endproc
+ 565              	.LFE138:
+ 567              		.section	.text.TM_GPIO_GetPinSource,"ax",%progbits
+ 568              		.align	1
+ 569              		.global	TM_GPIO_GetPinSource
+ 570              		.syntax unified
+ 571              		.thumb
+ 572              		.thumb_func
+ 573              		.fpu fpv4-sp-d16
+ 575              	TM_GPIO_GetPinSource:
+ 576              	.LVL31:
+ 577              	.LFB139:
+ 166:Src/tm_stm32f4_gpio.c **** 
+ 167:Src/tm_stm32f4_gpio.c **** uint16_t TM_GPIO_GetPinSource(uint16_t GPIO_Pin) {
+ 578              		.loc 1 167 50 is_stmt 1 view -0
+ 579              		.cfi_startproc
+ 580              		@ args = 0, pretend = 0, frame = 0
+ 581              		@ frame_needed = 0, uses_anonymous_args = 0
+ 582              		@ link register save eliminated.
+ 583              		.loc 1 167 50 is_stmt 0 view .LVU161
+ 584 0000 0346     		mov	r3, r0
+ 168:Src/tm_stm32f4_gpio.c **** 	uint16_t pinsource = 0;
+ 585              		.loc 1 168 2 is_stmt 1 view .LVU162
+ 586              	.LVL32:
+ 169:Src/tm_stm32f4_gpio.c **** 	
+ 170:Src/tm_stm32f4_gpio.c **** 	/* Get pinsource */
+ 171:Src/tm_stm32f4_gpio.c **** 	while (GPIO_Pin > 1) {
+ 587              		.loc 1 171 2 view .LVU163
+ 168:Src/tm_stm32f4_gpio.c **** 	uint16_t pinsource = 0;
+ 588              		.loc 1 168 11 is_stmt 0 view .LVU164
+ 589 0002 0020     		movs	r0, #0
+ 590              	.LVL33:
+ 591              	.L64:
+ 592              		.loc 1 171 8 is_stmt 1 view .LVU165
+ 593 0004 012B     		cmp	r3, #1
+ 594 0006 03D9     		bls	.L66
+ 172:Src/tm_stm32f4_gpio.c **** 		/* Increase pinsource */
+ 173:Src/tm_stm32f4_gpio.c **** 		pinsource++;
+ 595              		.loc 1 173 3 view .LVU166
+ARM GAS  /tmp/ccvVajHS.s 			page 16
+
+
+ 596              		.loc 1 173 12 is_stmt 0 view .LVU167
+ 597 0008 0130     		adds	r0, r0, #1
+ 598              	.LVL34:
+ 599              		.loc 1 173 12 view .LVU168
+ 600 000a 80B2     		uxth	r0, r0
+ 601              	.LVL35:
+ 174:Src/tm_stm32f4_gpio.c **** 		/* Shift right */
+ 175:Src/tm_stm32f4_gpio.c **** 		GPIO_Pin >>= 1;
+ 602              		.loc 1 175 3 is_stmt 1 view .LVU169
+ 603              		.loc 1 175 12 is_stmt 0 view .LVU170
+ 604 000c 5B08     		lsrs	r3, r3, #1
+ 605              	.LVL36:
+ 606              		.loc 1 175 12 view .LVU171
+ 607 000e F9E7     		b	.L64
+ 608              	.L66:
+ 176:Src/tm_stm32f4_gpio.c **** 	}
+ 177:Src/tm_stm32f4_gpio.c **** 	
+ 178:Src/tm_stm32f4_gpio.c **** 	/* Return source */
+ 179:Src/tm_stm32f4_gpio.c **** 	return pinsource;
+ 180:Src/tm_stm32f4_gpio.c **** }
+ 609              		.loc 1 180 1 view .LVU172
+ 610 0010 7047     		bx	lr
+ 611              		.cfi_endproc
+ 612              	.LFE139:
+ 614              		.section	.text.TM_GPIO_GetPortSource,"ax",%progbits
+ 615              		.align	1
+ 616              		.global	TM_GPIO_GetPortSource
+ 617              		.syntax unified
+ 618              		.thumb
+ 619              		.thumb_func
+ 620              		.fpu fpv4-sp-d16
+ 622              	TM_GPIO_GetPortSource:
+ 623              	.LVL37:
+ 624              	.LFB140:
+ 181:Src/tm_stm32f4_gpio.c **** 
+ 182:Src/tm_stm32f4_gpio.c **** uint16_t TM_GPIO_GetPortSource(GPIO_TypeDef* GPIOx) {
+ 625              		.loc 1 182 53 is_stmt 1 view -0
+ 626              		.cfi_startproc
+ 627              		@ args = 0, pretend = 0, frame = 0
+ 628              		@ frame_needed = 0, uses_anonymous_args = 0
+ 629              		@ link register save eliminated.
+ 183:Src/tm_stm32f4_gpio.c **** 	/* Get port source number */
+ 184:Src/tm_stm32f4_gpio.c **** 	/* Offset from GPIOA                       Difference between 2 GPIO addresses */
+ 185:Src/tm_stm32f4_gpio.c **** 	return ((uint32_t)GPIOx - (GPIOA_BASE)) / ((GPIOB_BASE) - (GPIOA_BASE));
+ 630              		.loc 1 185 2 view .LVU174
+ 631              		.loc 1 185 26 is_stmt 0 view .LVU175
+ 632 0000 00F13F40 		add	r0, r0, #-1090519040
+ 633              	.LVL38:
+ 634              		.loc 1 185 26 view .LVU176
+ 635 0004 00F57E00 		add	r0, r0, #16646144
+ 636              	.LVL39:
+ 186:Src/tm_stm32f4_gpio.c **** }
+ 637              		.loc 1 186 1 view .LVU177
+ 638 0008 C0F38F20 		ubfx	r0, r0, #10, #16
+ 639              	.LVL40:
+ 640              		.loc 1 186 1 view .LVU178
+ 641 000c 7047     		bx	lr
+ARM GAS  /tmp/ccvVajHS.s 			page 17
+
+
+ 642              		.cfi_endproc
+ 643              	.LFE140:
+ 645              		.section	.text.TM_GPIO_DeInit,"ax",%progbits
+ 646              		.align	1
+ 647              		.global	TM_GPIO_DeInit
+ 648              		.syntax unified
+ 649              		.thumb
+ 650              		.thumb_func
+ 651              		.fpu fpv4-sp-d16
+ 653              	TM_GPIO_DeInit:
+ 654              	.LVL41:
+ 655              	.LFB132:
+  68:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 656              		.loc 1 68 61 is_stmt 1 view -0
+ 657              		.cfi_startproc
+ 658              		@ args = 0, pretend = 0, frame = 0
+ 659              		@ frame_needed = 0, uses_anonymous_args = 0
+  68:Src/tm_stm32f4_gpio.c **** 	uint8_t i;
+ 660              		.loc 1 68 61 is_stmt 0 view .LVU180
+ 661 0000 70B5     		push	{r4, r5, r6, lr}
+ 662              	.LCFI18:
+ 663              		.cfi_def_cfa_offset 16
+ 664              		.cfi_offset 4, -16
+ 665              		.cfi_offset 5, -12
+ 666              		.cfi_offset 6, -8
+ 667              		.cfi_offset 14, -4
+ 668 0002 0646     		mov	r6, r0
+ 669 0004 0D46     		mov	r5, r1
+  69:Src/tm_stm32f4_gpio.c **** 	uint8_t ptr = TM_GPIO_GetPortSource(GPIOx);
+ 670              		.loc 1 69 2 is_stmt 1 view .LVU181
+  70:Src/tm_stm32f4_gpio.c **** 	
+ 671              		.loc 1 70 2 view .LVU182
+  70:Src/tm_stm32f4_gpio.c **** 	
+ 672              		.loc 1 70 16 is_stmt 0 view .LVU183
+ 673 0006 FFF7FEFF 		bl	TM_GPIO_GetPortSource
+ 674              	.LVL42:
+  70:Src/tm_stm32f4_gpio.c **** 	
+ 675              		.loc 1 70 10 view .LVU184
+ 676 000a C0B2     		uxtb	r0, r0
+ 677              	.LVL43:
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 678              		.loc 1 73 2 is_stmt 1 view .LVU185
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 679              		.loc 1 73 9 is_stmt 0 view .LVU186
+ 680 000c 0023     		movs	r3, #0
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 681              		.loc 1 73 2 view .LVU187
+ 682 000e 01E0     		b	.L69
+ 683              	.LVL44:
+ 684              	.L70:
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 685              		.loc 1 73 27 is_stmt 1 discriminator 2 view .LVU188
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 686              		.loc 1 73 28 is_stmt 0 discriminator 2 view .LVU189
+ 687 0010 0133     		adds	r3, r3, #1
+ 688              	.LVL45:
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ARM GAS  /tmp/ccvVajHS.s 			page 18
+
+
+ 689              		.loc 1 73 28 discriminator 2 view .LVU190
+ 690 0012 DBB2     		uxtb	r3, r3
+ 691              	.LVL46:
+ 692              	.L69:
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 693              		.loc 1 73 17 is_stmt 1 discriminator 1 view .LVU191
+  73:Src/tm_stm32f4_gpio.c **** 		/* Pin is set */
+ 694              		.loc 1 73 2 is_stmt 0 discriminator 1 view .LVU192
+ 695 0014 0F2B     		cmp	r3, #15
+ 696 0016 15D8     		bhi	.L73
+  75:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 697              		.loc 1 75 3 is_stmt 1 view .LVU193
+  75:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 698              		.loc 1 75 7 is_stmt 0 view .LVU194
+ 699 0018 45FA03F2 		asr	r2, r5, r3
+  75:Src/tm_stm32f4_gpio.c **** 			/* Set 11 bits combination for analog mode */
+ 700              		.loc 1 75 6 view .LVU195
+ 701 001c 12F0010F 		tst	r2, #1
+ 702 0020 F6D0     		beq	.L70
+  77:Src/tm_stm32f4_gpio.c **** 			
+ 703              		.loc 1 77 4 is_stmt 1 view .LVU196
+  77:Src/tm_stm32f4_gpio.c **** 			
+ 704              		.loc 1 77 17 is_stmt 0 view .LVU197
+ 705 0022 3268     		ldr	r2, [r6]
+  77:Src/tm_stm32f4_gpio.c **** 			
+ 706              		.loc 1 77 32 view .LVU198
+ 707 0024 5C00     		lsls	r4, r3, #1
+  77:Src/tm_stm32f4_gpio.c **** 			
+ 708              		.loc 1 77 26 view .LVU199
+ 709 0026 0321     		movs	r1, #3
+ 710 0028 A140     		lsls	r1, r1, r4
+  77:Src/tm_stm32f4_gpio.c **** 			
+ 711              		.loc 1 77 17 view .LVU200
+ 712 002a 0A43     		orrs	r2, r2, r1
+ 713 002c 3260     		str	r2, [r6]
+  80:Src/tm_stm32f4_gpio.c **** 		}
+ 714              		.loc 1 80 4 is_stmt 1 view .LVU201
+  80:Src/tm_stm32f4_gpio.c **** 		}
+ 715              		.loc 1 80 30 is_stmt 0 view .LVU202
+ 716 002e 0122     		movs	r2, #1
+ 717 0030 02FA03F4 		lsl	r4, r2, r3
+  80:Src/tm_stm32f4_gpio.c **** 		}
+ 718              		.loc 1 80 23 view .LVU203
+ 719 0034 0449     		ldr	r1, .L74
+ 720 0036 31F81020 		ldrh	r2, [r1, r0, lsl #1]
+ 721 003a 22EA0402 		bic	r2, r2, r4
+ 722 003e 21F81020 		strh	r2, [r1, r0, lsl #1]	@ movhi
+ 723 0042 E5E7     		b	.L70
+ 724              	.L73:
+  83:Src/tm_stm32f4_gpio.c **** 
+ 725              		.loc 1 83 1 view .LVU204
+ 726 0044 70BD     		pop	{r4, r5, r6, pc}
+ 727              	.LVL47:
+ 728              	.L75:
+  83:Src/tm_stm32f4_gpio.c **** 
+ 729              		.loc 1 83 1 view .LVU205
+ 730 0046 00BF     		.align	2
+ARM GAS  /tmp/ccvVajHS.s 			page 19
+
+
+ 731              	.L74:
+ 732 0048 00000000 		.word	.LANCHOR0
+ 733              		.cfi_endproc
+ 734              	.LFE132:
+ 736              		.section	.text.TM_GPIO_INT_EnableClock,"ax",%progbits
+ 737              		.align	1
+ 738              		.global	TM_GPIO_INT_EnableClock
+ 739              		.syntax unified
+ 740              		.thumb
+ 741              		.thumb_func
+ 742              		.fpu fpv4-sp-d16
+ 744              	TM_GPIO_INT_EnableClock:
+ 745              	.LVL48:
+ 746              	.LFB141:
+ 187:Src/tm_stm32f4_gpio.c **** 
+ 188:Src/tm_stm32f4_gpio.c **** /* Private functions */
+ 189:Src/tm_stm32f4_gpio.c **** void TM_GPIO_INT_EnableClock(GPIO_TypeDef* GPIOx) {
+ 747              		.loc 1 189 51 is_stmt 1 view -0
+ 748              		.cfi_startproc
+ 749              		@ args = 0, pretend = 0, frame = 0
+ 750              		@ frame_needed = 0, uses_anonymous_args = 0
+ 751              		.loc 1 189 51 is_stmt 0 view .LVU207
+ 752 0000 08B5     		push	{r3, lr}
+ 753              	.LCFI19:
+ 754              		.cfi_def_cfa_offset 8
+ 755              		.cfi_offset 3, -8
+ 756              		.cfi_offset 14, -4
+ 190:Src/tm_stm32f4_gpio.c **** 	/* Set bit according to the 1 << portsourcenumber */
+ 191:Src/tm_stm32f4_gpio.c **** 	RCC->AHB1ENR |= (1 << TM_GPIO_GetPortSource(GPIOx));
+ 757              		.loc 1 191 2 is_stmt 1 view .LVU208
+ 758              		.loc 1 191 24 is_stmt 0 view .LVU209
+ 759 0002 FFF7FEFF 		bl	TM_GPIO_GetPortSource
+ 760              	.LVL49:
+ 761              		.loc 1 191 15 view .LVU210
+ 762 0006 0349     		ldr	r1, .L78
+ 763 0008 0B6B     		ldr	r3, [r1, #48]
+ 764              		.loc 1 191 21 view .LVU211
+ 765 000a 0122     		movs	r2, #1
+ 766 000c 8240     		lsls	r2, r2, r0
+ 767              		.loc 1 191 15 view .LVU212
+ 768 000e 1343     		orrs	r3, r3, r2
+ 769 0010 0B63     		str	r3, [r1, #48]
+ 192:Src/tm_stm32f4_gpio.c **** }
+ 770              		.loc 1 192 1 view .LVU213
+ 771 0012 08BD     		pop	{r3, pc}
+ 772              	.L79:
+ 773              		.align	2
+ 774              	.L78:
+ 775 0014 00380240 		.word	1073887232
+ 776              		.cfi_endproc
+ 777              	.LFE141:
+ 779              		.section	.text.TM_GPIO_INT_DisableClock,"ax",%progbits
+ 780              		.align	1
+ 781              		.global	TM_GPIO_INT_DisableClock
+ 782              		.syntax unified
+ 783              		.thumb
+ 784              		.thumb_func
+ARM GAS  /tmp/ccvVajHS.s 			page 20
+
+
+ 785              		.fpu fpv4-sp-d16
+ 787              	TM_GPIO_INT_DisableClock:
+ 788              	.LVL50:
+ 789              	.LFB142:
+ 193:Src/tm_stm32f4_gpio.c **** 
+ 194:Src/tm_stm32f4_gpio.c **** void TM_GPIO_INT_DisableClock(GPIO_TypeDef* GPIOx) {
+ 790              		.loc 1 194 52 is_stmt 1 view -0
+ 791              		.cfi_startproc
+ 792              		@ args = 0, pretend = 0, frame = 0
+ 793              		@ frame_needed = 0, uses_anonymous_args = 0
+ 794              		.loc 1 194 52 is_stmt 0 view .LVU215
+ 795 0000 08B5     		push	{r3, lr}
+ 796              	.LCFI20:
+ 797              		.cfi_def_cfa_offset 8
+ 798              		.cfi_offset 3, -8
+ 799              		.cfi_offset 14, -4
+ 195:Src/tm_stm32f4_gpio.c **** 	/* Clear bit according to the 1 << portsourcenumber */
+ 196:Src/tm_stm32f4_gpio.c **** 	RCC->AHB1ENR &= ~(1 << TM_GPIO_GetPortSource(GPIOx));
+ 800              		.loc 1 196 2 is_stmt 1 view .LVU216
+ 801              		.loc 1 196 25 is_stmt 0 view .LVU217
+ 802 0002 FFF7FEFF 		bl	TM_GPIO_GetPortSource
+ 803              	.LVL51:
+ 804              		.loc 1 196 22 view .LVU218
+ 805 0006 0123     		movs	r3, #1
+ 806 0008 8340     		lsls	r3, r3, r0
+ 807              		.loc 1 196 15 view .LVU219
+ 808 000a 034A     		ldr	r2, .L82
+ 809 000c 106B     		ldr	r0, [r2, #48]
+ 810 000e 20EA0300 		bic	r0, r0, r3
+ 811 0012 1063     		str	r0, [r2, #48]
+ 197:Src/tm_stm32f4_gpio.c **** }
+ 812              		.loc 1 197 1 view .LVU220
+ 813 0014 08BD     		pop	{r3, pc}
+ 814              	.L83:
+ 815 0016 00BF     		.align	2
+ 816              	.L82:
+ 817 0018 00380240 		.word	1073887232
+ 818              		.cfi_endproc
+ 819              	.LFE142:
+ 821              		.section	.text.TM_GPIO_INT_Init,"ax",%progbits
+ 822              		.align	1
+ 823              		.global	TM_GPIO_INT_Init
+ 824              		.syntax unified
+ 825              		.thumb
+ 826              		.thumb_func
+ 827              		.fpu fpv4-sp-d16
+ 829              	TM_GPIO_INT_Init:
+ 830              	.LVL52:
+ 831              	.LFB143:
+ 198:Src/tm_stm32f4_gpio.c **** 
+ 199:Src/tm_stm32f4_gpio.c **** void TM_GPIO_INT_Init(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TM_GPIO_Mode_t GPIO_Mode, TM_GPIO_OTy
+ 832              		.loc 1 199 171 is_stmt 1 view -0
+ 833              		.cfi_startproc
+ 834              		@ args = 8, pretend = 0, frame = 8
+ 835              		@ frame_needed = 0, uses_anonymous_args = 0
+ 836              		.loc 1 199 171 is_stmt 0 view .LVU222
+ 837 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ARM GAS  /tmp/ccvVajHS.s 			page 21
+
+
+ 838              	.LCFI21:
+ 839              		.cfi_def_cfa_offset 36
+ 840              		.cfi_offset 4, -36
+ 841              		.cfi_offset 5, -32
+ 842              		.cfi_offset 6, -28
+ 843              		.cfi_offset 7, -24
+ 844              		.cfi_offset 8, -20
+ 845              		.cfi_offset 9, -16
+ 846              		.cfi_offset 10, -12
+ 847              		.cfi_offset 11, -8
+ 848              		.cfi_offset 14, -4
+ 849 0004 83B0     		sub	sp, sp, #12
+ 850              	.LCFI22:
+ 851              		.cfi_def_cfa_offset 48
+ 852 0006 0646     		mov	r6, r0
+ 853 0008 8846     		mov	r8, r1
+ 854 000a 1746     		mov	r7, r2
+ 855 000c 0193     		str	r3, [sp, #4]
+ 856 000e 9DF83090 		ldrb	r9, [sp, #48]	@ zero_extendqisi2
+ 857 0012 9DF834A0 		ldrb	r10, [sp, #52]	@ zero_extendqisi2
+ 200:Src/tm_stm32f4_gpio.c **** 	uint8_t pinpos;
+ 858              		.loc 1 200 2 is_stmt 1 view .LVU223
+ 201:Src/tm_stm32f4_gpio.c **** 	uint8_t ptr = TM_GPIO_GetPortSource(GPIOx);
+ 859              		.loc 1 201 2 view .LVU224
+ 860              		.loc 1 201 16 is_stmt 0 view .LVU225
+ 861 0016 FFF7FEFF 		bl	TM_GPIO_GetPortSource
+ 862              	.LVL53:
+ 863              		.loc 1 201 10 view .LVU226
+ 864 001a C0B2     		uxtb	r0, r0
+ 865              	.LVL54:
+ 202:Src/tm_stm32f4_gpio.c **** 	
+ 203:Src/tm_stm32f4_gpio.c **** 	/* Go through all pins */
+ 204:Src/tm_stm32f4_gpio.c **** 	for (pinpos = 0; pinpos < 0x10; pinpos++) {
+ 866              		.loc 1 204 2 is_stmt 1 view .LVU227
+ 867              		.loc 1 204 14 is_stmt 0 view .LVU228
+ 868 001c 0023     		movs	r3, #0
+ 869              		.loc 1 204 2 view .LVU229
+ 870 001e 15E0     		b	.L85
+ 871              	.LVL55:
+ 872              	.L90:
+ 205:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 206:Src/tm_stm32f4_gpio.c **** 		if ((GPIO_Pin & (1 << pinpos)) == 0) {
+ 207:Src/tm_stm32f4_gpio.c **** 			continue;
+ 208:Src/tm_stm32f4_gpio.c **** 		}
+ 209:Src/tm_stm32f4_gpio.c **** 		
+ 210:Src/tm_stm32f4_gpio.c **** 		/* Pin is used */
+ 211:Src/tm_stm32f4_gpio.c **** 		GPIO_UsedPins[ptr] |= 1 << pinpos;
+ 212:Src/tm_stm32f4_gpio.c **** 		
+ 213:Src/tm_stm32f4_gpio.c **** 		/* Set GPIO PUPD register */
+ 214:Src/tm_stm32f4_gpio.c **** 		GPIOx->PUPDR = (GPIOx->PUPDR & ~(0x03 << (2 * pinpos))) | ((uint32_t)(GPIO_PuPd << (2 * pinpos)))
+ 215:Src/tm_stm32f4_gpio.c **** 		
+ 216:Src/tm_stm32f4_gpio.c **** 		/* Set GPIO MODE register */
+ 217:Src/tm_stm32f4_gpio.c **** 		GPIOx->MODER = (GPIOx->MODER & ~((uint32_t)(0x03 << (2 * pinpos)))) | ((uint32_t)(GPIO_Mode << (2
+ 218:Src/tm_stm32f4_gpio.c **** 		
+ 219:Src/tm_stm32f4_gpio.c **** 		/* Set only if output or alternate functions */
+ 220:Src/tm_stm32f4_gpio.c **** 		if (GPIO_Mode == TM_GPIO_Mode_OUT || GPIO_Mode == TM_GPIO_Mode_AF) {		
+ 221:Src/tm_stm32f4_gpio.c **** 			/* Set GPIO OTYPE register */
+ARM GAS  /tmp/ccvVajHS.s 			page 22
+
+
+ 222:Src/tm_stm32f4_gpio.c **** 			GPIOx->OTYPER = (GPIOx->OTYPER & ~(uint16_t)(0x01 << pinpos)) | ((uint16_t)(GPIO_OType << pinpos
+ 873              		.loc 1 222 4 is_stmt 1 view .LVU230
+ 874              		.loc 1 222 26 is_stmt 0 view .LVU231
+ 875 0020 7268     		ldr	r2, [r6, #4]
+ 876              		.loc 1 222 37 view .LVU232
+ 877 0022 ADB2     		uxth	r5, r5
+ 878              		.loc 1 222 35 view .LVU233
+ 879 0024 22EA0505 		bic	r5, r2, r5
+ 880              		.loc 1 222 91 view .LVU234
+ 881 0028 019A     		ldr	r2, [sp, #4]
+ 882 002a 02FA03FC 		lsl	ip, r2, r3
+ 883              		.loc 1 222 69 view .LVU235
+ 884 002e 1FFA8CFC 		uxth	ip, ip
+ 885              		.loc 1 222 66 view .LVU236
+ 886 0032 45EA0C05 		orr	r5, r5, ip
+ 887              		.loc 1 222 18 view .LVU237
+ 888 0036 7560     		str	r5, [r6, #4]
+ 223:Src/tm_stm32f4_gpio.c **** 			
+ 224:Src/tm_stm32f4_gpio.c **** 			/* Set GPIO OSPEED register */
+ 225:Src/tm_stm32f4_gpio.c **** 			GPIOx->OSPEEDR = (GPIOx->OSPEEDR & ~((uint32_t)(0x03 << (2 * pinpos)))) | ((uint32_t)(GPIO_Speed
+ 889              		.loc 1 225 4 is_stmt 1 view .LVU238
+ 890              		.loc 1 225 27 is_stmt 0 view .LVU239
+ 891 0038 B268     		ldr	r2, [r6, #8]
+ 892              		.loc 1 225 37 view .LVU240
+ 893 003a 0EEA020E 		and	lr, lr, r2
+ 894              		.loc 1 225 101 view .LVU241
+ 895 003e 0AFA04F4 		lsl	r4, r10, r4
+ 896              		.loc 1 225 76 view .LVU242
+ 897 0042 4EEA0404 		orr	r4, lr, r4
+ 898              		.loc 1 225 19 view .LVU243
+ 899 0046 B460     		str	r4, [r6, #8]
+ 900              	.L86:
+ 204:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 901              		.loc 1 204 34 is_stmt 1 discriminator 2 view .LVU244
+ 204:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 902              		.loc 1 204 40 is_stmt 0 discriminator 2 view .LVU245
+ 903 0048 0133     		adds	r3, r3, #1
+ 904              	.LVL56:
+ 204:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 905              		.loc 1 204 40 discriminator 2 view .LVU246
+ 906 004a DBB2     		uxtb	r3, r3
+ 907              	.LVL57:
+ 908              	.L85:
+ 204:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 909              		.loc 1 204 19 is_stmt 1 discriminator 1 view .LVU247
+ 204:Src/tm_stm32f4_gpio.c **** 		/* Check if pin available */
+ 910              		.loc 1 204 2 is_stmt 0 discriminator 1 view .LVU248
+ 911 004c 0F2B     		cmp	r3, #15
+ 912 004e 25D8     		bhi	.L89
+ 206:Src/tm_stm32f4_gpio.c **** 			continue;
+ 913              		.loc 1 206 3 is_stmt 1 view .LVU249
+ 206:Src/tm_stm32f4_gpio.c **** 			continue;
+ 914              		.loc 1 206 34 is_stmt 0 view .LVU250
+ 915 0050 48FA03F2 		asr	r2, r8, r3
+ 206:Src/tm_stm32f4_gpio.c **** 			continue;
+ 916              		.loc 1 206 6 view .LVU251
+ 917 0054 12F0010F 		tst	r2, #1
+ARM GAS  /tmp/ccvVajHS.s 			page 23
+
+
+ 918 0058 F6D0     		beq	.L86
+ 211:Src/tm_stm32f4_gpio.c **** 		
+ 919              		.loc 1 211 3 is_stmt 1 view .LVU252
+ 211:Src/tm_stm32f4_gpio.c **** 		
+ 920              		.loc 1 211 27 is_stmt 0 view .LVU253
+ 921 005a 0125     		movs	r5, #1
+ 922 005c 9D40     		lsls	r5, r5, r3
+ 211:Src/tm_stm32f4_gpio.c **** 		
+ 923              		.loc 1 211 22 view .LVU254
+ 924 005e 1149     		ldr	r1, .L91
+ 925 0060 31F81020 		ldrh	r2, [r1, r0, lsl #1]
+ 926 0064 2A43     		orrs	r2, r2, r5
+ 927 0066 21F81020 		strh	r2, [r1, r0, lsl #1]	@ movhi
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 928              		.loc 1 214 3 is_stmt 1 view .LVU255
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 929              		.loc 1 214 24 is_stmt 0 view .LVU256
+ 930 006a F168     		ldr	r1, [r6, #12]
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 931              		.loc 1 214 47 view .LVU257
+ 932 006c 5C00     		lsls	r4, r3, #1
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 933              		.loc 1 214 41 view .LVU258
+ 934 006e 0322     		movs	r2, #3
+ 935 0070 A240     		lsls	r2, r2, r4
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 936              		.loc 1 214 34 view .LVU259
+ 937 0072 6FEA020E 		mvn	lr, r2
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 938              		.loc 1 214 32 view .LVU260
+ 939 0076 21EA0201 		bic	r1, r1, r2
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 940              		.loc 1 214 83 view .LVU261
+ 941 007a 09FA04FB 		lsl	fp, r9, r4
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 942              		.loc 1 214 59 view .LVU262
+ 943 007e 41EA0B01 		orr	r1, r1, fp
+ 214:Src/tm_stm32f4_gpio.c **** 		
+ 944              		.loc 1 214 16 view .LVU263
+ 945 0082 F160     		str	r1, [r6, #12]
+ 217:Src/tm_stm32f4_gpio.c **** 		
+ 946              		.loc 1 217 3 is_stmt 1 view .LVU264
+ 217:Src/tm_stm32f4_gpio.c **** 		
+ 947              		.loc 1 217 24 is_stmt 0 view .LVU265
+ 948 0084 3168     		ldr	r1, [r6]
+ 217:Src/tm_stm32f4_gpio.c **** 		
+ 949              		.loc 1 217 32 view .LVU266
+ 950 0086 21EA0202 		bic	r2, r1, r2
+ 217:Src/tm_stm32f4_gpio.c **** 		
+ 951              		.loc 1 217 95 view .LVU267
+ 952 008a 07FA04F1 		lsl	r1, r7, r4
+ 217:Src/tm_stm32f4_gpio.c **** 		
+ 953              		.loc 1 217 71 view .LVU268
+ 954 008e 0A43     		orrs	r2, r2, r1
+ 217:Src/tm_stm32f4_gpio.c **** 		
+ 955              		.loc 1 217 16 view .LVU269
+ 956 0090 3260     		str	r2, [r6]
+ARM GAS  /tmp/ccvVajHS.s 			page 24
+
+
+ 220:Src/tm_stm32f4_gpio.c **** 			/* Set GPIO OTYPE register */
+ 957              		.loc 1 220 3 is_stmt 1 view .LVU270
+ 220:Src/tm_stm32f4_gpio.c **** 			/* Set GPIO OTYPE register */
+ 958              		.loc 1 220 37 is_stmt 0 view .LVU271
+ 959 0092 7A1E     		subs	r2, r7, #1
+ 960 0094 D2B2     		uxtb	r2, r2
+ 220:Src/tm_stm32f4_gpio.c **** 			/* Set GPIO OTYPE register */
+ 961              		.loc 1 220 6 view .LVU272
+ 962 0096 012A     		cmp	r2, #1
+ 963 0098 D6D8     		bhi	.L86
+ 964 009a C1E7     		b	.L90
+ 965              	.L89:
+ 226:Src/tm_stm32f4_gpio.c **** 		}
+ 227:Src/tm_stm32f4_gpio.c **** 	}
+ 228:Src/tm_stm32f4_gpio.c **** }
+ 966              		.loc 1 228 1 view .LVU273
+ 967 009c 03B0     		add	sp, sp, #12
+ 968              	.LCFI23:
+ 969              		.cfi_def_cfa_offset 36
+ 970              		@ sp needed
+ 971 009e BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 972              	.LVL58:
+ 973              	.L92:
+ 974              		.loc 1 228 1 view .LVU274
+ 975 00a2 00BF     		.align	2
+ 976              	.L91:
+ 977 00a4 00000000 		.word	.LANCHOR0
+ 978              		.cfi_endproc
+ 979              	.LFE143:
+ 981              		.section	.text.TM_GPIO_Init,"ax",%progbits
+ 982              		.align	1
+ 983              		.global	TM_GPIO_Init
+ 984              		.syntax unified
+ 985              		.thumb
+ 986              		.thumb_func
+ 987              		.fpu fpv4-sp-d16
+ 989              	TM_GPIO_Init:
+ 990              	.LVL59:
+ 991              	.LFB130:
+  29:Src/tm_stm32f4_gpio.c **** 	/* Check input */
+ 992              		.loc 1 29 167 is_stmt 1 view -0
+ 993              		.cfi_startproc
+ 994              		@ args = 8, pretend = 0, frame = 0
+ 995              		@ frame_needed = 0, uses_anonymous_args = 0
+  31:Src/tm_stm32f4_gpio.c **** 		return;
+ 996              		.loc 1 31 2 view .LVU276
+  31:Src/tm_stm32f4_gpio.c **** 		return;
+ 997              		.loc 1 31 5 is_stmt 0 view .LVU277
+ 998 0000 01B9     		cbnz	r1, .L99
+ 999 0002 7047     		bx	lr
+ 1000              	.L99:
+  29:Src/tm_stm32f4_gpio.c **** 	/* Check input */
+ 1001              		.loc 1 29 167 view .LVU278
+ 1002 0004 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1003              	.LCFI24:
+ 1004              		.cfi_def_cfa_offset 20
+ 1005              		.cfi_offset 4, -20
+ARM GAS  /tmp/ccvVajHS.s 			page 25
+
+
+ 1006              		.cfi_offset 5, -16
+ 1007              		.cfi_offset 6, -12
+ 1008              		.cfi_offset 7, -8
+ 1009              		.cfi_offset 14, -4
+ 1010 0006 83B0     		sub	sp, sp, #12
+ 1011              	.LCFI25:
+ 1012              		.cfi_def_cfa_offset 32
+ 1013 0008 0646     		mov	r6, r0
+ 1014 000a 1446     		mov	r4, r2
+ 1015 000c 1D46     		mov	r5, r3
+ 1016 000e 0F46     		mov	r7, r1
+  36:Src/tm_stm32f4_gpio.c **** 	
+ 1017              		.loc 1 36 2 is_stmt 1 view .LVU279
+ 1018 0010 FFF7FEFF 		bl	TM_GPIO_INT_EnableClock
+ 1019              	.LVL60:
+  39:Src/tm_stm32f4_gpio.c **** }
+ 1020              		.loc 1 39 2 view .LVU280
+ 1021 0014 9DF82430 		ldrb	r3, [sp, #36]	@ zero_extendqisi2
+ 1022 0018 0193     		str	r3, [sp, #4]
+ 1023 001a 9DF82030 		ldrb	r3, [sp, #32]	@ zero_extendqisi2
+ 1024 001e 0093     		str	r3, [sp]
+ 1025 0020 2B46     		mov	r3, r5
+ 1026 0022 2246     		mov	r2, r4
+ 1027 0024 3946     		mov	r1, r7
+ 1028 0026 3046     		mov	r0, r6
+ 1029 0028 FFF7FEFF 		bl	TM_GPIO_INT_Init
+ 1030              	.LVL61:
+  40:Src/tm_stm32f4_gpio.c **** 
+ 1031              		.loc 1 40 1 is_stmt 0 view .LVU281
+ 1032 002c 03B0     		add	sp, sp, #12
+ 1033              	.LCFI26:
+ 1034              		.cfi_def_cfa_offset 20
+ 1035              		@ sp needed
+ 1036 002e F0BD     		pop	{r4, r5, r6, r7, pc}
+  40:Src/tm_stm32f4_gpio.c **** 
+ 1037              		.loc 1 40 1 view .LVU282
+ 1038              		.cfi_endproc
+ 1039              	.LFE130:
+ 1041              		.section	.text.TM_GPIO_InitAlternate,"ax",%progbits
+ 1042              		.align	1
+ 1043              		.global	TM_GPIO_InitAlternate
+ 1044              		.syntax unified
+ 1045              		.thumb
+ 1046              		.thumb_func
+ 1047              		.fpu fpv4-sp-d16
+ 1049              	TM_GPIO_InitAlternate:
+ 1050              	.LVL62:
+ 1051              	.LFB131:
+  42:Src/tm_stm32f4_gpio.c **** 	uint32_t pinpos;
+ 1052              		.loc 1 42 169 is_stmt 1 view -0
+ 1053              		.cfi_startproc
+ 1054              		@ args = 8, pretend = 0, frame = 0
+ 1055              		@ frame_needed = 0, uses_anonymous_args = 0
+  42:Src/tm_stm32f4_gpio.c **** 	uint32_t pinpos;
+ 1056              		.loc 1 42 169 is_stmt 0 view .LVU284
+ 1057 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 1058              	.LCFI27:
+ARM GAS  /tmp/ccvVajHS.s 			page 26
+
+
+ 1059              		.cfi_def_cfa_offset 28
+ 1060              		.cfi_offset 4, -28
+ 1061              		.cfi_offset 5, -24
+ 1062              		.cfi_offset 6, -20
+ 1063              		.cfi_offset 7, -16
+ 1064              		.cfi_offset 8, -12
+ 1065              		.cfi_offset 9, -8
+ 1066              		.cfi_offset 14, -4
+ 1067 0004 83B0     		sub	sp, sp, #12
+ 1068              	.LCFI28:
+ 1069              		.cfi_def_cfa_offset 40
+ 1070 0006 9DF82C70 		ldrb	r7, [sp, #44]	@ zero_extendqisi2
+  43:Src/tm_stm32f4_gpio.c **** 
+ 1071              		.loc 1 43 2 is_stmt 1 view .LVU285
+  46:Src/tm_stm32f4_gpio.c **** 		return;
+ 1072              		.loc 1 46 2 view .LVU286
+  46:Src/tm_stm32f4_gpio.c **** 		return;
+ 1073              		.loc 1 46 5 is_stmt 0 view .LVU287
+ 1074 000a 11B9     		cbnz	r1, .L106
+ 1075              	.LVL63:
+ 1076              	.L100:
+  66:Src/tm_stm32f4_gpio.c **** 
+ 1077              		.loc 1 66 1 view .LVU288
+ 1078 000c 03B0     		add	sp, sp, #12
+ 1079              	.LCFI29:
+ 1080              		.cfi_remember_state
+ 1081              		.cfi_def_cfa_offset 28
+ 1082              		@ sp needed
+ 1083 000e BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 1084              	.LVL64:
+ 1085              	.L106:
+ 1086              	.LCFI30:
+ 1087              		.cfi_restore_state
+  66:Src/tm_stm32f4_gpio.c **** 
+ 1088              		.loc 1 66 1 view .LVU289
+ 1089 0012 0546     		mov	r5, r0
+ 1090 0014 9046     		mov	r8, r2
+ 1091 0016 9946     		mov	r9, r3
+ 1092 0018 0E46     		mov	r6, r1
+  51:Src/tm_stm32f4_gpio.c **** 	
+ 1093              		.loc 1 51 2 is_stmt 1 view .LVU290
+ 1094 001a FFF7FEFF 		bl	TM_GPIO_INT_EnableClock
+ 1095              	.LVL65:
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1096              		.loc 1 54 2 view .LVU291
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1097              		.loc 1 54 14 is_stmt 0 view .LVU292
+ 1098 001e 0021     		movs	r1, #0
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1099              		.loc 1 54 2 view .LVU293
+ 1100 0020 00E0     		b	.L102
+ 1101              	.LVL66:
+ 1102              	.L103:
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1103              		.loc 1 54 34 is_stmt 1 discriminator 2 view .LVU294
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1104              		.loc 1 54 40 is_stmt 0 discriminator 2 view .LVU295
+ARM GAS  /tmp/ccvVajHS.s 			page 27
+
+
+ 1105 0022 0131     		adds	r1, r1, #1
+ 1106              	.LVL67:
+ 1107              	.L102:
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1108              		.loc 1 54 19 is_stmt 1 discriminator 1 view .LVU296
+  54:Src/tm_stm32f4_gpio.c **** 		/* Check pin */
+ 1109              		.loc 1 54 2 is_stmt 0 discriminator 1 view .LVU297
+ 1110 0024 0F29     		cmp	r1, #15
+ 1111 0026 15D8     		bhi	.L107
+  56:Src/tm_stm32f4_gpio.c **** 			continue;
+ 1112              		.loc 1 56 3 is_stmt 1 view .LVU298
+  56:Src/tm_stm32f4_gpio.c **** 			continue;
+ 1113              		.loc 1 56 34 is_stmt 0 view .LVU299
+ 1114 0028 46FA01F3 		asr	r3, r6, r1
+  56:Src/tm_stm32f4_gpio.c **** 			continue;
+ 1115              		.loc 1 56 6 view .LVU300
+ 1116 002c 13F0010F 		tst	r3, #1
+ 1117 0030 F7D0     		beq	.L103
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1118              		.loc 1 61 3 is_stmt 1 view .LVU301
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1119              		.loc 1 61 51 is_stmt 0 view .LVU302
+ 1120 0032 CA08     		lsrs	r2, r1, #3
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1121              		.loc 1 61 43 view .LVU303
+ 1122 0034 0832     		adds	r2, r2, #8
+ 1123 0036 55F82230 		ldr	r3, [r5, r2, lsl #2]
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1124              		.loc 1 61 85 view .LVU304
+ 1125 003a 01F00704 		and	r4, r1, #7
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1126              		.loc 1 61 75 view .LVU305
+ 1127 003e A400     		lsls	r4, r4, #2
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1128              		.loc 1 61 69 view .LVU306
+ 1129 0040 0F20     		movs	r0, #15
+ 1130 0042 A040     		lsls	r0, r0, r4
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1131              		.loc 1 61 60 view .LVU307
+ 1132 0044 23EA0003 		bic	r3, r3, r0
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1133              		.loc 1 61 109 view .LVU308
+ 1134 0048 07FA04F4 		lsl	r4, r7, r4
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1135              		.loc 1 61 96 view .LVU309
+ 1136 004c 1C43     		orrs	r4, r4, r3
+  61:Src/tm_stm32f4_gpio.c **** 	}
+ 1137              		.loc 1 61 30 view .LVU310
+ 1138 004e 45F82240 		str	r4, [r5, r2, lsl #2]
+ 1139 0052 E6E7     		b	.L103
+ 1140              	.L107:
+  65:Src/tm_stm32f4_gpio.c **** }
+ 1141              		.loc 1 65 2 is_stmt 1 view .LVU311
+ 1142 0054 9DF82830 		ldrb	r3, [sp, #40]	@ zero_extendqisi2
+ 1143 0058 0193     		str	r3, [sp, #4]
+ 1144 005a CDF80090 		str	r9, [sp]
+ 1145 005e 4346     		mov	r3, r8
+ARM GAS  /tmp/ccvVajHS.s 			page 28
+
+
+ 1146 0060 0222     		movs	r2, #2
+ 1147 0062 3146     		mov	r1, r6
+ 1148              	.LVL68:
+  65:Src/tm_stm32f4_gpio.c **** }
+ 1149              		.loc 1 65 2 is_stmt 0 view .LVU312
+ 1150 0064 2846     		mov	r0, r5
+ 1151 0066 FFF7FEFF 		bl	TM_GPIO_INT_Init
+ 1152              	.LVL69:
+ 1153 006a CFE7     		b	.L100
+ 1154              		.cfi_endproc
+ 1155              	.LFE131:
+ 1157              		.section	.text.TM_GPIO_GetUsedPins,"ax",%progbits
+ 1158              		.align	1
+ 1159              		.global	TM_GPIO_GetUsedPins
+ 1160              		.syntax unified
+ 1161              		.thumb
+ 1162              		.thumb_func
+ 1163              		.fpu fpv4-sp-d16
+ 1165              	TM_GPIO_GetUsedPins:
+ 1166              	.LVL70:
+ 1167              	.LFB144:
+ 229:Src/tm_stm32f4_gpio.c **** 
+ 230:Src/tm_stm32f4_gpio.c **** uint16_t TM_GPIO_GetUsedPins(GPIO_TypeDef* GPIOx) {
+ 1168              		.loc 1 230 51 is_stmt 1 view -0
+ 1169              		.cfi_startproc
+ 1170              		@ args = 0, pretend = 0, frame = 0
+ 1171              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1172              		.loc 1 230 51 is_stmt 0 view .LVU314
+ 1173 0000 08B5     		push	{r3, lr}
+ 1174              	.LCFI31:
+ 1175              		.cfi_def_cfa_offset 8
+ 1176              		.cfi_offset 3, -8
+ 1177              		.cfi_offset 14, -4
+ 231:Src/tm_stm32f4_gpio.c **** 	/* Return used */
+ 232:Src/tm_stm32f4_gpio.c **** 	return GPIO_UsedPins[TM_GPIO_GetPortSource(GPIOx)];
+ 1178              		.loc 1 232 2 is_stmt 1 view .LVU315
+ 1179              		.loc 1 232 23 is_stmt 0 view .LVU316
+ 1180 0002 FFF7FEFF 		bl	TM_GPIO_GetPortSource
+ 1181              	.LVL71:
+ 233:Src/tm_stm32f4_gpio.c **** }
+ 1182              		.loc 1 233 1 view .LVU317
+ 1183 0006 024B     		ldr	r3, .L110
+ 1184 0008 33F81000 		ldrh	r0, [r3, r0, lsl #1]
+ 1185 000c 08BD     		pop	{r3, pc}
+ 1186              	.L111:
+ 1187 000e 00BF     		.align	2
+ 1188              	.L110:
+ 1189 0010 00000000 		.word	.LANCHOR0
+ 1190              		.cfi_endproc
+ 1191              	.LFE144:
+ 1193              		.section	.text.TM_GPIO_GetFreePins,"ax",%progbits
+ 1194              		.align	1
+ 1195              		.global	TM_GPIO_GetFreePins
+ 1196              		.syntax unified
+ 1197              		.thumb
+ 1198              		.thumb_func
+ 1199              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccvVajHS.s 			page 29
+
+
+ 1201              	TM_GPIO_GetFreePins:
+ 1202              	.LVL72:
+ 1203              	.LFB145:
+ 234:Src/tm_stm32f4_gpio.c **** 
+ 235:Src/tm_stm32f4_gpio.c **** uint16_t TM_GPIO_GetFreePins(GPIO_TypeDef* GPIOx) {
+ 1204              		.loc 1 235 51 is_stmt 1 view -0
+ 1205              		.cfi_startproc
+ 1206              		@ args = 0, pretend = 0, frame = 0
+ 1207              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1208              		.loc 1 235 51 is_stmt 0 view .LVU319
+ 1209 0000 08B5     		push	{r3, lr}
+ 1210              	.LCFI32:
+ 1211              		.cfi_def_cfa_offset 8
+ 1212              		.cfi_offset 3, -8
+ 1213              		.cfi_offset 14, -4
+ 236:Src/tm_stm32f4_gpio.c **** 	/* Return free pins */
+ 237:Src/tm_stm32f4_gpio.c **** 	return ~GPIO_UsedPins[TM_GPIO_GetPortSource(GPIOx)];
+ 1214              		.loc 1 237 2 is_stmt 1 view .LVU320
+ 1215              		.loc 1 237 24 is_stmt 0 view .LVU321
+ 1216 0002 FFF7FEFF 		bl	TM_GPIO_GetPortSource
+ 1217              	.LVL73:
+ 1218              		.loc 1 237 23 view .LVU322
+ 1219 0006 034B     		ldr	r3, .L114
+ 1220 0008 33F81000 		ldrh	r0, [r3, r0, lsl #1]
+ 1221              		.loc 1 237 9 view .LVU323
+ 1222 000c C043     		mvns	r0, r0
+ 238:Src/tm_stm32f4_gpio.c **** }
+ 1223              		.loc 1 238 1 view .LVU324
+ 1224 000e 80B2     		uxth	r0, r0
+ 1225 0010 08BD     		pop	{r3, pc}
+ 1226              	.L115:
+ 1227 0012 00BF     		.align	2
+ 1228              	.L114:
+ 1229 0014 00000000 		.word	.LANCHOR0
+ 1230              		.cfi_endproc
+ 1231              	.LFE145:
+ 1233              		.section	.bss.GPIO_UsedPins,"aw",%nobits
+ 1234              		.align	2
+ 1235              		.set	.LANCHOR0,. + 0
+ 1238              	GPIO_UsedPins:
+ 1239 0000 00000000 		.space	22
+ 1239      00000000 
+ 1239      00000000 
+ 1239      00000000 
+ 1239      00000000 
+ 1240              		.text
+ 1241              	.Letext0:
+ 1242              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 1243              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 1244              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 1245              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 1246              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 1247              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 1248              		.file 8 "Inc/tm_stm32f4_gpio.h"
+ARM GAS  /tmp/ccvVajHS.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 tm_stm32f4_gpio.c
+     /tmp/ccvVajHS.s:18     .text.TM_GPIO_SetPinAsInput:0000000000000000 $t
+     /tmp/ccvVajHS.s:26     .text.TM_GPIO_SetPinAsInput:0000000000000000 TM_GPIO_SetPinAsInput
+     /tmp/ccvVajHS.s:121    .text.TM_GPIO_SetPinAsOutput:0000000000000000 $t
+     /tmp/ccvVajHS.s:128    .text.TM_GPIO_SetPinAsOutput:0000000000000000 TM_GPIO_SetPinAsOutput
+     /tmp/ccvVajHS.s:232    .text.TM_GPIO_SetPinAsAnalog:0000000000000000 $t
+     /tmp/ccvVajHS.s:239    .text.TM_GPIO_SetPinAsAnalog:0000000000000000 TM_GPIO_SetPinAsAnalog
+     /tmp/ccvVajHS.s:333    .text.TM_GPIO_SetPinAsAlternate:0000000000000000 $t
+     /tmp/ccvVajHS.s:340    .text.TM_GPIO_SetPinAsAlternate:0000000000000000 TM_GPIO_SetPinAsAlternate
+     /tmp/ccvVajHS.s:444    .text.TM_GPIO_SetPullResistor:0000000000000000 $t
+     /tmp/ccvVajHS.s:451    .text.TM_GPIO_SetPullResistor:0000000000000000 TM_GPIO_SetPullResistor
+     /tmp/ccvVajHS.s:528    .text.TM_GPIO_Lock:0000000000000000 $t
+     /tmp/ccvVajHS.s:535    .text.TM_GPIO_Lock:0000000000000000 TM_GPIO_Lock
+     /tmp/ccvVajHS.s:568    .text.TM_GPIO_GetPinSource:0000000000000000 $t
+     /tmp/ccvVajHS.s:575    .text.TM_GPIO_GetPinSource:0000000000000000 TM_GPIO_GetPinSource
+     /tmp/ccvVajHS.s:615    .text.TM_GPIO_GetPortSource:0000000000000000 $t
+     /tmp/ccvVajHS.s:622    .text.TM_GPIO_GetPortSource:0000000000000000 TM_GPIO_GetPortSource
+     /tmp/ccvVajHS.s:646    .text.TM_GPIO_DeInit:0000000000000000 $t
+     /tmp/ccvVajHS.s:653    .text.TM_GPIO_DeInit:0000000000000000 TM_GPIO_DeInit
+     /tmp/ccvVajHS.s:732    .text.TM_GPIO_DeInit:0000000000000048 $d
+     /tmp/ccvVajHS.s:737    .text.TM_GPIO_INT_EnableClock:0000000000000000 $t
+     /tmp/ccvVajHS.s:744    .text.TM_GPIO_INT_EnableClock:0000000000000000 TM_GPIO_INT_EnableClock
+     /tmp/ccvVajHS.s:775    .text.TM_GPIO_INT_EnableClock:0000000000000014 $d
+     /tmp/ccvVajHS.s:780    .text.TM_GPIO_INT_DisableClock:0000000000000000 $t
+     /tmp/ccvVajHS.s:787    .text.TM_GPIO_INT_DisableClock:0000000000000000 TM_GPIO_INT_DisableClock
+     /tmp/ccvVajHS.s:817    .text.TM_GPIO_INT_DisableClock:0000000000000018 $d
+     /tmp/ccvVajHS.s:822    .text.TM_GPIO_INT_Init:0000000000000000 $t
+     /tmp/ccvVajHS.s:829    .text.TM_GPIO_INT_Init:0000000000000000 TM_GPIO_INT_Init
+     /tmp/ccvVajHS.s:977    .text.TM_GPIO_INT_Init:00000000000000a4 $d
+     /tmp/ccvVajHS.s:982    .text.TM_GPIO_Init:0000000000000000 $t
+     /tmp/ccvVajHS.s:989    .text.TM_GPIO_Init:0000000000000000 TM_GPIO_Init
+     /tmp/ccvVajHS.s:1042   .text.TM_GPIO_InitAlternate:0000000000000000 $t
+     /tmp/ccvVajHS.s:1049   .text.TM_GPIO_InitAlternate:0000000000000000 TM_GPIO_InitAlternate
+     /tmp/ccvVajHS.s:1158   .text.TM_GPIO_GetUsedPins:0000000000000000 $t
+     /tmp/ccvVajHS.s:1165   .text.TM_GPIO_GetUsedPins:0000000000000000 TM_GPIO_GetUsedPins
+     /tmp/ccvVajHS.s:1189   .text.TM_GPIO_GetUsedPins:0000000000000010 $d
+     /tmp/ccvVajHS.s:1194   .text.TM_GPIO_GetFreePins:0000000000000000 $t
+     /tmp/ccvVajHS.s:1201   .text.TM_GPIO_GetFreePins:0000000000000000 TM_GPIO_GetFreePins
+     /tmp/ccvVajHS.s:1229   .text.TM_GPIO_GetFreePins:0000000000000014 $d
+     /tmp/ccvVajHS.s:1234   .bss.GPIO_UsedPins:0000000000000000 $d
+     /tmp/ccvVajHS.s:1238   .bss.GPIO_UsedPins:0000000000000000 GPIO_UsedPins
+
+NO UNDEFINED SYMBOLS

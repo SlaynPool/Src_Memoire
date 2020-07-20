@@ -1,0 +1,1326 @@
+ARM GAS  /tmp/ccK1PnFl.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"tm_stm32f4_timer_properties.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.TM_TIMER_PROPERTIES_GetTimerProperties,"ax",%progbits
+  18              		.align	1
+  19              		.global	TM_TIMER_PROPERTIES_GetTimerProperties
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	TM_TIMER_PROPERTIES_GetTimerProperties:
+  27              	.LVL0:
+  28              	.LFB130:
+  29              		.file 1 "Src/tm_stm32f4_timer_properties.c"
+   1:Src/tm_stm32f4_timer_properties.c **** /**	
+   2:Src/tm_stm32f4_timer_properties.c ****  * |----------------------------------------------------------------------
+   3:Src/tm_stm32f4_timer_properties.c ****  * | Copyright (C) Tilen Majerle, 2014
+   4:Src/tm_stm32f4_timer_properties.c ****  * | 
+   5:Src/tm_stm32f4_timer_properties.c ****  * | This program is free software: you can redistribute it and/or modify
+   6:Src/tm_stm32f4_timer_properties.c ****  * | it under the terms of the GNU General Public License as published by
+   7:Src/tm_stm32f4_timer_properties.c ****  * | the Free Software Foundation, either version 3 of the License, or
+   8:Src/tm_stm32f4_timer_properties.c ****  * | any later version.
+   9:Src/tm_stm32f4_timer_properties.c ****  * |  
+  10:Src/tm_stm32f4_timer_properties.c ****  * | This program is distributed in the hope that it will be useful,
+  11:Src/tm_stm32f4_timer_properties.c ****  * | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:Src/tm_stm32f4_timer_properties.c ****  * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:Src/tm_stm32f4_timer_properties.c ****  * | GNU General Public License for more details.
+  14:Src/tm_stm32f4_timer_properties.c ****  * | 
+  15:Src/tm_stm32f4_timer_properties.c ****  * | You should have received a copy of the GNU General Public License
+  16:Src/tm_stm32f4_timer_properties.c ****  * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:Src/tm_stm32f4_timer_properties.c ****  * |----------------------------------------------------------------------
+  18:Src/tm_stm32f4_timer_properties.c ****  */
+  19:Src/tm_stm32f4_timer_properties.c **** #include "tm_stm32f4_timer_properties.h"
+  20:Src/tm_stm32f4_timer_properties.c **** 
+  21:Src/tm_stm32f4_timer_properties.c **** TM_TIMER_PROPERTIES_Result_t TM_TIMER_PROPERTIES_GetTimerProperties(TIM_TypeDef* TIMx, TM_TIMER_PRO
+  30              		.loc 1 21 123 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 16
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 21 123 is_stmt 0 view .LVU1
+  35 0000 30B5     		push	{r4, r5, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 12
+ARM GAS  /tmp/ccK1PnFl.s 			page 2
+
+
+  38              		.cfi_offset 4, -12
+  39              		.cfi_offset 5, -8
+  40              		.cfi_offset 14, -4
+  41 0002 85B0     		sub	sp, sp, #20
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 32
+  44 0004 0446     		mov	r4, r0
+  45 0006 0D46     		mov	r5, r1
+  22:Src/tm_stm32f4_timer_properties.c **** 	RCC_ClocksTypeDef RCC_ClocksStruct;
+  46              		.loc 1 22 2 is_stmt 1 view .LVU2
+  23:Src/tm_stm32f4_timer_properties.c **** 
+  24:Src/tm_stm32f4_timer_properties.c **** 	/* Get clocks */
+  25:Src/tm_stm32f4_timer_properties.c **** 	RCC_GetClocksFreq(&RCC_ClocksStruct);
+  47              		.loc 1 25 2 view .LVU3
+  48 0008 6846     		mov	r0, sp
+  49              	.LVL1:
+  50              		.loc 1 25 2 is_stmt 0 view .LVU4
+  51 000a FFF7FEFF 		bl	RCC_GetClocksFreq
+  52              	.LVL2:
+  26:Src/tm_stm32f4_timer_properties.c **** 	
+  27:Src/tm_stm32f4_timer_properties.c **** 	/* All timers have 16-bit prescaler */
+  28:Src/tm_stm32f4_timer_properties.c **** 	Timer_Data->MaxPrescaler = 0xFFFF;
+  53              		.loc 1 28 2 is_stmt 1 view .LVU5
+  54              		.loc 1 28 27 is_stmt 0 view .LVU6
+  55 000e 4FF6FF73 		movw	r3, #65535
+  56 0012 AB60     		str	r3, [r5, #8]
+  29:Src/tm_stm32f4_timer_properties.c **** 	
+  30:Src/tm_stm32f4_timer_properties.c **** 	if (0 /* 32bit timers with PCLK2 max frequency */
+  57              		.loc 1 30 2 is_stmt 1 view .LVU7
+  58              		.loc 1 30 5 is_stmt 0 view .LVU8
+  59 0014 B4F1804F 		cmp	r4, #1073741824
+  60 0018 32D0     		beq	.L2
+  31:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM2
+  32:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM2
+  33:Src/tm_stm32f4_timer_properties.c **** #endif
+  34:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM5
+  35:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM5
+  61              		.loc 1 35 3 view .LVU9
+  62 001a 244B     		ldr	r3, .L10
+  63 001c 9C42     		cmp	r4, r3
+  64 001e 2FD0     		beq	.L2
+  36:Src/tm_stm32f4_timer_properties.c **** #endif
+  37:Src/tm_stm32f4_timer_properties.c **** 	) {
+  38:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->TimerFrequency = RCC_ClocksStruct.PCLK2_Frequency;	/* Clock */
+  39:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFFFFFF;								/* Max period */
+  40:Src/tm_stm32f4_timer_properties.c **** 		
+  41:Src/tm_stm32f4_timer_properties.c **** 		/* Timer valid */
+  42:Src/tm_stm32f4_timer_properties.c **** 		return TM_TIMER_PROPERTIES_Result_Ok;
+  43:Src/tm_stm32f4_timer_properties.c **** 	} else if (0	/* 16bit timers with HCLK clock frequency */
+  65              		.loc 1 43 9 is_stmt 1 view .LVU10
+  66              		.loc 1 43 12 is_stmt 0 view .LVU11
+  67 0020 234B     		ldr	r3, .L10+4
+  68 0022 9C42     		cmp	r4, r3
+  69 0024 33D0     		beq	.L5
+  44:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM1
+  45:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM1
+  46:Src/tm_stm32f4_timer_properties.c **** #endif
+ARM GAS  /tmp/ccK1PnFl.s 			page 3
+
+
+  47:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM8
+  48:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM8
+  70              		.loc 1 48 3 view .LVU12
+  71 0026 03F58063 		add	r3, r3, #1024
+  72 002a 9C42     		cmp	r4, r3
+  73 002c 2FD0     		beq	.L5
+  49:Src/tm_stm32f4_timer_properties.c **** #endif
+  50:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM9
+  51:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM9
+  74              		.loc 1 51 3 view .LVU13
+  75 002e 03F57053 		add	r3, r3, #15360
+  76 0032 9C42     		cmp	r4, r3
+  77 0034 2BD0     		beq	.L5
+  52:Src/tm_stm32f4_timer_properties.c **** #endif
+  53:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM10
+  54:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM10
+  78              		.loc 1 54 3 view .LVU14
+  79 0036 03F58063 		add	r3, r3, #1024
+  80 003a 9C42     		cmp	r4, r3
+  81 003c 27D0     		beq	.L5
+  55:Src/tm_stm32f4_timer_properties.c **** #endif
+  56:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM11
+  57:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM11
+  82              		.loc 1 57 3 view .LVU15
+  83 003e 03F58063 		add	r3, r3, #1024
+  84 0042 9C42     		cmp	r4, r3
+  85 0044 23D0     		beq	.L5
+  58:Src/tm_stm32f4_timer_properties.c **** #endif
+  59:Src/tm_stm32f4_timer_properties.c **** 	) {
+  60:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->TimerFrequency = RCC_ClocksStruct.HCLK_Frequency;	/* Clock */
+  61:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+  62:Src/tm_stm32f4_timer_properties.c **** 		
+  63:Src/tm_stm32f4_timer_properties.c **** 		/* Timer valid */
+  64:Src/tm_stm32f4_timer_properties.c **** 		return TM_TIMER_PROPERTIES_Result_Ok;
+  65:Src/tm_stm32f4_timer_properties.c **** 	} else if (0	/* 16bit timers with PCLK2 clock frequency */
+  86              		.loc 1 65 9 is_stmt 1 view .LVU16
+  87              		.loc 1 65 12 is_stmt 0 view .LVU17
+  88 0046 1B4B     		ldr	r3, .L10+8
+  89 0048 9C42     		cmp	r4, r3
+  90 004a 28D0     		beq	.L7
+  66:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM3
+  67:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM3
+  68:Src/tm_stm32f4_timer_properties.c **** #endif
+  69:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM4
+  70:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM4
+  91              		.loc 1 70 3 view .LVU18
+  92 004c 03F58063 		add	r3, r3, #1024
+  93 0050 9C42     		cmp	r4, r3
+  94 0052 24D0     		beq	.L7
+  71:Src/tm_stm32f4_timer_properties.c **** #endif
+  72:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM6
+  73:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM6
+  95              		.loc 1 73 3 view .LVU19
+  96 0054 03F50063 		add	r3, r3, #2048
+  97 0058 9C42     		cmp	r4, r3
+  98 005a 20D0     		beq	.L7
+  74:Src/tm_stm32f4_timer_properties.c **** #endif
+ARM GAS  /tmp/ccK1PnFl.s 			page 4
+
+
+  75:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM7
+  76:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM7
+  99              		.loc 1 76 3 view .LVU20
+ 100 005c 03F58063 		add	r3, r3, #1024
+ 101 0060 9C42     		cmp	r4, r3
+ 102 0062 1CD0     		beq	.L7
+  77:Src/tm_stm32f4_timer_properties.c **** #endif
+  78:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM12
+  79:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM12
+ 103              		.loc 1 79 3 view .LVU21
+ 104 0064 03F58063 		add	r3, r3, #1024
+ 105 0068 9C42     		cmp	r4, r3
+ 106 006a 18D0     		beq	.L7
+  80:Src/tm_stm32f4_timer_properties.c **** #endif
+  81:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM13
+  82:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM13
+ 107              		.loc 1 82 3 view .LVU22
+ 108 006c 03F58063 		add	r3, r3, #1024
+ 109 0070 9C42     		cmp	r4, r3
+ 110 0072 14D0     		beq	.L7
+  83:Src/tm_stm32f4_timer_properties.c **** #endif
+  84:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM14
+  85:Src/tm_stm32f4_timer_properties.c **** 		|| TIMx == TIM14
+ 111              		.loc 1 85 3 view .LVU23
+ 112 0074 03F58063 		add	r3, r3, #1024
+ 113 0078 9C42     		cmp	r4, r3
+ 114 007a 10D0     		beq	.L7
+  86:Src/tm_stm32f4_timer_properties.c **** #endif
+  87:Src/tm_stm32f4_timer_properties.c **** 	) {
+  88:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->TimerFrequency = RCC_ClocksStruct.PCLK2_Frequency;	/* Clock */
+  89:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+  90:Src/tm_stm32f4_timer_properties.c **** 		
+  91:Src/tm_stm32f4_timer_properties.c **** 		/* Timer valid */
+  92:Src/tm_stm32f4_timer_properties.c **** 		return TM_TIMER_PROPERTIES_Result_Ok;
+  93:Src/tm_stm32f4_timer_properties.c **** 	}
+  94:Src/tm_stm32f4_timer_properties.c **** 	
+  95:Src/tm_stm32f4_timer_properties.c **** 	/* Timer is not valid */
+  96:Src/tm_stm32f4_timer_properties.c **** 	return TM_TIMER_PROPERTIES_Result_TimerNotValid;
+ 115              		.loc 1 96 9 view .LVU24
+ 116 007c 0220     		movs	r0, #2
+ 117 007e 0CE0     		b	.L4
+ 118              	.L2:
+  38:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFFFFFF;								/* Max period */
+ 119              		.loc 1 38 3 is_stmt 1 view .LVU25
+  38:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFFFFFF;								/* Max period */
+ 120              		.loc 1 38 48 is_stmt 0 view .LVU26
+ 121 0080 039B     		ldr	r3, [sp, #12]
+  38:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFFFFFF;								/* Max period */
+ 122              		.loc 1 38 30 view .LVU27
+ 123 0082 2B60     		str	r3, [r5]
+  39:Src/tm_stm32f4_timer_properties.c **** 		
+ 124              		.loc 1 39 3 is_stmt 1 view .LVU28
+  39:Src/tm_stm32f4_timer_properties.c **** 		
+ 125              		.loc 1 39 25 is_stmt 0 view .LVU29
+ 126 0084 4FF0FF33 		mov	r3, #-1
+ 127 0088 6B60     		str	r3, [r5, #4]
+  42:Src/tm_stm32f4_timer_properties.c **** 	} else if (0	/* 16bit timers with HCLK clock frequency */
+ARM GAS  /tmp/ccK1PnFl.s 			page 5
+
+
+ 128              		.loc 1 42 3 is_stmt 1 view .LVU30
+  42:Src/tm_stm32f4_timer_properties.c **** 	} else if (0	/* 16bit timers with HCLK clock frequency */
+ 129              		.loc 1 42 10 is_stmt 0 view .LVU31
+ 130 008a 0020     		movs	r0, #0
+ 131 008c 05E0     		b	.L4
+ 132              	.L5:
+  60:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+ 133              		.loc 1 60 3 is_stmt 1 view .LVU32
+  60:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+ 134              		.loc 1 60 48 is_stmt 0 view .LVU33
+ 135 008e 019B     		ldr	r3, [sp, #4]
+  60:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+ 136              		.loc 1 60 30 view .LVU34
+ 137 0090 2B60     		str	r3, [r5]
+  61:Src/tm_stm32f4_timer_properties.c **** 		
+ 138              		.loc 1 61 3 is_stmt 1 view .LVU35
+  61:Src/tm_stm32f4_timer_properties.c **** 		
+ 139              		.loc 1 61 25 is_stmt 0 view .LVU36
+ 140 0092 4FF6FF73 		movw	r3, #65535
+ 141 0096 6B60     		str	r3, [r5, #4]
+  64:Src/tm_stm32f4_timer_properties.c **** 	} else if (0	/* 16bit timers with PCLK2 clock frequency */
+ 142              		.loc 1 64 3 is_stmt 1 view .LVU37
+  64:Src/tm_stm32f4_timer_properties.c **** 	} else if (0	/* 16bit timers with PCLK2 clock frequency */
+ 143              		.loc 1 64 10 is_stmt 0 view .LVU38
+ 144 0098 0020     		movs	r0, #0
+ 145              	.L4:
+  97:Src/tm_stm32f4_timer_properties.c **** }
+ 146              		.loc 1 97 1 view .LVU39
+ 147 009a 05B0     		add	sp, sp, #20
+ 148              	.LCFI2:
+ 149              		.cfi_remember_state
+ 150              		.cfi_def_cfa_offset 12
+ 151              		@ sp needed
+ 152 009c 30BD     		pop	{r4, r5, pc}
+ 153              	.LVL3:
+ 154              	.L7:
+ 155              	.LCFI3:
+ 156              		.cfi_restore_state
+  88:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+ 157              		.loc 1 88 3 is_stmt 1 view .LVU40
+  88:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+ 158              		.loc 1 88 48 is_stmt 0 view .LVU41
+ 159 009e 039B     		ldr	r3, [sp, #12]
+  88:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod = 0xFFFF;									/* Max period */
+ 160              		.loc 1 88 30 view .LVU42
+ 161 00a0 2B60     		str	r3, [r5]
+  89:Src/tm_stm32f4_timer_properties.c **** 		
+ 162              		.loc 1 89 3 is_stmt 1 view .LVU43
+  89:Src/tm_stm32f4_timer_properties.c **** 		
+ 163              		.loc 1 89 25 is_stmt 0 view .LVU44
+ 164 00a2 4FF6FF73 		movw	r3, #65535
+ 165 00a6 6B60     		str	r3, [r5, #4]
+  92:Src/tm_stm32f4_timer_properties.c **** 	}
+ 166              		.loc 1 92 3 is_stmt 1 view .LVU45
+  92:Src/tm_stm32f4_timer_properties.c **** 	}
+ 167              		.loc 1 92 10 is_stmt 0 view .LVU46
+ 168 00a8 0020     		movs	r0, #0
+ARM GAS  /tmp/ccK1PnFl.s 			page 6
+
+
+ 169 00aa F6E7     		b	.L4
+ 170              	.L11:
+ 171              		.align	2
+ 172              	.L10:
+ 173 00ac 000C0040 		.word	1073744896
+ 174 00b0 00000140 		.word	1073807360
+ 175 00b4 00040040 		.word	1073742848
+ 176              		.cfi_endproc
+ 177              	.LFE130:
+ 179              		.global	__aeabi_ui2d
+ 180              		.global	__aeabi_dcmplt
+ 181              		.global	__aeabi_dcmpeq
+ 182              		.global	__aeabi_ddiv
+ 183              		.global	__aeabi_d2uiz
+ 184              		.section	.text.TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency,"ax",%progbits
+ 185              		.align	1
+ 186              		.global	TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency
+ 187              		.syntax unified
+ 188              		.thumb
+ 189              		.thumb_func
+ 190              		.fpu fpv4-sp-d16
+ 192              	TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency:
+ 193              	.LVL4:
+ 194              	.LFB131:
+  98:Src/tm_stm32f4_timer_properties.c **** 
+  99:Src/tm_stm32f4_timer_properties.c **** TM_TIMER_PROPERTIES_Result_t TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency(TM_TIMER_PROPERTIE
+ 195              		.loc 1 99 135 is_stmt 1 view -0
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 0
+ 198              		@ frame_needed = 0, uses_anonymous_args = 0
+ 199              		.loc 1 99 135 is_stmt 0 view .LVU48
+ 200 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 201              	.LCFI4:
+ 202              		.cfi_def_cfa_offset 24
+ 203              		.cfi_offset 4, -24
+ 204              		.cfi_offset 5, -20
+ 205              		.cfi_offset 6, -16
+ 206              		.cfi_offset 7, -12
+ 207              		.cfi_offset 8, -8
+ 208              		.cfi_offset 14, -4
+ 209 0004 0446     		mov	r4, r0
+ 210 0006 57EC106B 		vmov	r6, r7, d0
+ 100:Src/tm_stm32f4_timer_properties.c **** 	if (frequency > Timer_Data->TimerFrequency) {
+ 211              		.loc 1 100 2 is_stmt 1 view .LVU49
+ 212              		.loc 1 100 28 is_stmt 0 view .LVU50
+ 213 000a D0F80080 		ldr	r8, [r0]
+ 214              		.loc 1 100 16 view .LVU51
+ 215 000e 4046     		mov	r0, r8
+ 216              	.LVL5:
+ 217              		.loc 1 100 16 view .LVU52
+ 218 0010 FFF7FEFF 		bl	__aeabi_ui2d
+ 219              	.LVL6:
+ 220              		.loc 1 100 5 view .LVU53
+ 221 0014 3246     		mov	r2, r6
+ 222 0016 3B46     		mov	r3, r7
+ 223 0018 FFF7FEFF 		bl	__aeabi_dcmplt
+ 224              	.LVL7:
+ARM GAS  /tmp/ccK1PnFl.s 			page 7
+
+
+ 225 001c 78BB     		cbnz	r0, .L27
+ 101:Src/tm_stm32f4_timer_properties.c **** 		/* Reset values */
+ 102:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Prescaler = 0;
+ 103:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 104:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 105:Src/tm_stm32f4_timer_properties.c **** 		
+ 106:Src/tm_stm32f4_timer_properties.c **** 		/* Frequency too high */
+ 107:Src/tm_stm32f4_timer_properties.c **** 		return TM_TIMER_PROPERTIES_Result_FrequencyTooHigh;
+ 108:Src/tm_stm32f4_timer_properties.c **** 	} else if (frequency == 0) {
+ 226              		.loc 1 108 9 is_stmt 1 view .LVU54
+ 227              		.loc 1 108 12 is_stmt 0 view .LVU55
+ 228 001e 0022     		movs	r2, #0
+ 229 0020 0023     		movs	r3, #0
+ 230 0022 3046     		mov	r0, r6
+ 231 0024 3946     		mov	r1, r7
+ 232 0026 FFF7FEFF 		bl	__aeabi_dcmpeq
+ 233              	.LVL8:
+ 234 002a 70BB     		cbnz	r0, .L28
+ 109:Src/tm_stm32f4_timer_properties.c **** 		/* Reset values */
+ 110:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Prescaler = 0;
+ 111:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 112:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 113:Src/tm_stm32f4_timer_properties.c **** 		
+ 114:Src/tm_stm32f4_timer_properties.c **** 		/* Not valid frequency */
+ 115:Src/tm_stm32f4_timer_properties.c **** 		return TM_TIMER_PROPERTIES_Result_FrequencyTooLow;
+ 116:Src/tm_stm32f4_timer_properties.c **** 	}
+ 117:Src/tm_stm32f4_timer_properties.c **** 	
+ 118:Src/tm_stm32f4_timer_properties.c **** 	/* Fix for 16/32bit timers */
+ 119:Src/tm_stm32f4_timer_properties.c **** 	if (Timer_Data->MaxPeriod <= 0xFFFF) {
+ 235              		.loc 1 119 2 is_stmt 1 view .LVU56
+ 236              		.loc 1 119 16 is_stmt 0 view .LVU57
+ 237 002c 6368     		ldr	r3, [r4, #4]
+ 238              		.loc 1 119 5 view .LVU58
+ 239 002e B3F5803F 		cmp	r3, #65536
+ 240 0032 01D2     		bcs	.L18
+ 120:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->MaxPeriod++;
+ 241              		.loc 1 120 3 is_stmt 1 view .LVU59
+ 242              		.loc 1 120 24 is_stmt 0 view .LVU60
+ 243 0034 0133     		adds	r3, r3, #1
+ 244 0036 6360     		str	r3, [r4, #4]
+ 245              	.L18:
+ 121:Src/tm_stm32f4_timer_properties.c **** 	}
+ 122:Src/tm_stm32f4_timer_properties.c **** 	
+ 123:Src/tm_stm32f4_timer_properties.c **** 	/* Get minimum prescaler and maximum resolution for timer */
+ 124:Src/tm_stm32f4_timer_properties.c **** 	Timer_Data->Prescaler = 0;
+ 246              		.loc 1 124 2 is_stmt 1 view .LVU61
+ 247              		.loc 1 124 24 is_stmt 0 view .LVU62
+ 248 0038 0023     		movs	r3, #0
+ 249 003a 2361     		str	r3, [r4, #16]
+ 250              	.L20:
+ 125:Src/tm_stm32f4_timer_properties.c **** 	do {
+ 251              		.loc 1 125 2 is_stmt 1 discriminator 2 view .LVU63
+ 126:Src/tm_stm32f4_timer_properties.c **** 		/* Get clock */
+ 127:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = (Timer_Data->TimerFrequency / (Timer_Data->Prescaler + 1));
+ 252              		.loc 1 127 3 discriminator 2 view .LVU64
+ 253              		.loc 1 127 65 is_stmt 0 discriminator 2 view .LVU65
+ 254 003c 2569     		ldr	r5, [r4, #16]
+ARM GAS  /tmp/ccK1PnFl.s 			page 8
+
+
+ 255              		.loc 1 127 77 discriminator 2 view .LVU66
+ 256 003e 0135     		adds	r5, r5, #1
+ 128:Src/tm_stm32f4_timer_properties.c **** 		/* Get period */
+ 129:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = (Timer_Data->Period / frequency);
+ 257              		.loc 1 129 3 is_stmt 1 discriminator 2 view .LVU67
+ 258              		.loc 1 129 44 is_stmt 0 discriminator 2 view .LVU68
+ 259 0040 B8FBF5F0 		udiv	r0, r8, r5
+ 260 0044 FFF7FEFF 		bl	__aeabi_ui2d
+ 261              	.LVL9:
+ 262 0048 3246     		mov	r2, r6
+ 263 004a 3B46     		mov	r3, r7
+ 264 004c FFF7FEFF 		bl	__aeabi_ddiv
+ 265              	.LVL10:
+ 266              		.loc 1 129 22 discriminator 2 view .LVU69
+ 267 0050 FFF7FEFF 		bl	__aeabi_d2uiz
+ 268              	.LVL11:
+ 269 0054 E060     		str	r0, [r4, #12]
+ 130:Src/tm_stm32f4_timer_properties.c **** 		/* Increase prescaler value */
+ 131:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Prescaler++;
+ 270              		.loc 1 131 3 is_stmt 1 discriminator 2 view .LVU70
+ 271              		.loc 1 131 24 is_stmt 0 discriminator 2 view .LVU71
+ 272 0056 2561     		str	r5, [r4, #16]
+ 132:Src/tm_stm32f4_timer_properties.c **** 	} while (Timer_Data->Period > (Timer_Data->MaxPeriod) && Timer_Data->Prescaler <= (Timer_Data->Max
+ 273              		.loc 1 132 10 is_stmt 1 discriminator 2 view .LVU72
+ 274              		.loc 1 132 43 is_stmt 0 discriminator 2 view .LVU73
+ 275 0058 6368     		ldr	r3, [r4, #4]
+ 276              		.loc 1 132 2 discriminator 2 view .LVU74
+ 277 005a 9842     		cmp	r0, r3
+ 278 005c 03D9     		bls	.L19
+ 279              		.loc 1 132 95 discriminator 1 view .LVU75
+ 280 005e A368     		ldr	r3, [r4, #8]
+ 281              		.loc 1 132 110 discriminator 1 view .LVU76
+ 282 0060 0133     		adds	r3, r3, #1
+ 283              		.loc 1 132 56 discriminator 1 view .LVU77
+ 284 0062 9D42     		cmp	r5, r3
+ 285 0064 EAD9     		bls	.L20
+ 286              	.L19:
+ 133:Src/tm_stm32f4_timer_properties.c **** 	/* Check for too low frequency */ 
+ 134:Src/tm_stm32f4_timer_properties.c **** 	if (Timer_Data->Prescaler > (Timer_Data->MaxPrescaler + 1)) {
+ 287              		.loc 1 134 2 is_stmt 1 view .LVU78
+ 288              		.loc 1 134 41 is_stmt 0 view .LVU79
+ 289 0066 A368     		ldr	r3, [r4, #8]
+ 290              		.loc 1 134 56 view .LVU80
+ 291 0068 0133     		adds	r3, r3, #1
+ 292              		.loc 1 134 5 view .LVU81
+ 293 006a 9D42     		cmp	r5, r3
+ 294 006c 13D8     		bhi	.L29
+ 135:Src/tm_stm32f4_timer_properties.c **** 		/* Reset values */
+ 136:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Prescaler = 0;
+ 137:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 138:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 139:Src/tm_stm32f4_timer_properties.c **** 		
+ 140:Src/tm_stm32f4_timer_properties.c **** 		/* Prescaler too high, frequency is too low for use */
+ 141:Src/tm_stm32f4_timer_properties.c **** 		return TM_TIMER_PROPERTIES_Result_FrequencyTooLow;
+ 142:Src/tm_stm32f4_timer_properties.c **** 	}
+ 143:Src/tm_stm32f4_timer_properties.c **** 	
+ 144:Src/tm_stm32f4_timer_properties.c **** 	/* Set frequency */
+ARM GAS  /tmp/ccK1PnFl.s 			page 9
+
+
+ 145:Src/tm_stm32f4_timer_properties.c **** 	Timer_Data->Frequency = frequency;
+ 295              		.loc 1 145 2 is_stmt 1 view .LVU82
+ 296              		.loc 1 145 24 is_stmt 0 view .LVU83
+ 297 006e 3046     		mov	r0, r6
+ 298 0070 3946     		mov	r1, r7
+ 299 0072 FFF7FEFF 		bl	__aeabi_d2uiz
+ 300              	.LVL12:
+ 301 0076 6061     		str	r0, [r4, #20]
+ 146:Src/tm_stm32f4_timer_properties.c **** 	
+ 147:Src/tm_stm32f4_timer_properties.c **** 	/* Return OK */
+ 148:Src/tm_stm32f4_timer_properties.c **** 	return TM_TIMER_PROPERTIES_Result_Ok;
+ 302              		.loc 1 148 2 is_stmt 1 view .LVU84
+ 303              		.loc 1 148 9 is_stmt 0 view .LVU85
+ 304 0078 0020     		movs	r0, #0
+ 305              	.L15:
+ 149:Src/tm_stm32f4_timer_properties.c **** }
+ 306              		.loc 1 149 1 view .LVU86
+ 307 007a BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 308              	.LVL13:
+ 309              	.L27:
+ 102:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 310              		.loc 1 102 3 is_stmt 1 view .LVU87
+ 102:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 311              		.loc 1 102 25 is_stmt 0 view .LVU88
+ 312 007e 0023     		movs	r3, #0
+ 313 0080 2361     		str	r3, [r4, #16]
+ 103:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 314              		.loc 1 103 3 is_stmt 1 view .LVU89
+ 103:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 315              		.loc 1 103 22 is_stmt 0 view .LVU90
+ 316 0082 E360     		str	r3, [r4, #12]
+ 104:Src/tm_stm32f4_timer_properties.c **** 		
+ 317              		.loc 1 104 3 is_stmt 1 view .LVU91
+ 104:Src/tm_stm32f4_timer_properties.c **** 		
+ 318              		.loc 1 104 25 is_stmt 0 view .LVU92
+ 319 0084 6361     		str	r3, [r4, #20]
+ 107:Src/tm_stm32f4_timer_properties.c **** 	} else if (frequency == 0) {
+ 320              		.loc 1 107 3 is_stmt 1 view .LVU93
+ 107:Src/tm_stm32f4_timer_properties.c **** 	} else if (frequency == 0) {
+ 321              		.loc 1 107 10 is_stmt 0 view .LVU94
+ 322 0086 0320     		movs	r0, #3
+ 323 0088 F7E7     		b	.L15
+ 324              	.L28:
+ 110:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 325              		.loc 1 110 3 is_stmt 1 view .LVU95
+ 110:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 326              		.loc 1 110 25 is_stmt 0 view .LVU96
+ 327 008a 0023     		movs	r3, #0
+ 328 008c 2361     		str	r3, [r4, #16]
+ 111:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 329              		.loc 1 111 3 is_stmt 1 view .LVU97
+ 111:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 330              		.loc 1 111 22 is_stmt 0 view .LVU98
+ 331 008e E360     		str	r3, [r4, #12]
+ 112:Src/tm_stm32f4_timer_properties.c **** 		
+ 332              		.loc 1 112 3 is_stmt 1 view .LVU99
+ 112:Src/tm_stm32f4_timer_properties.c **** 		
+ARM GAS  /tmp/ccK1PnFl.s 			page 10
+
+
+ 333              		.loc 1 112 25 is_stmt 0 view .LVU100
+ 334 0090 6361     		str	r3, [r4, #20]
+ 115:Src/tm_stm32f4_timer_properties.c **** 	}
+ 335              		.loc 1 115 3 is_stmt 1 view .LVU101
+ 115:Src/tm_stm32f4_timer_properties.c **** 	}
+ 336              		.loc 1 115 10 is_stmt 0 view .LVU102
+ 337 0092 0420     		movs	r0, #4
+ 338 0094 F1E7     		b	.L15
+ 339              	.L29:
+ 136:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 340              		.loc 1 136 3 is_stmt 1 view .LVU103
+ 136:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Period = 0;
+ 341              		.loc 1 136 25 is_stmt 0 view .LVU104
+ 342 0096 0023     		movs	r3, #0
+ 343 0098 2361     		str	r3, [r4, #16]
+ 137:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 344              		.loc 1 137 3 is_stmt 1 view .LVU105
+ 137:Src/tm_stm32f4_timer_properties.c **** 		Timer_Data->Frequency = 0;
+ 345              		.loc 1 137 22 is_stmt 0 view .LVU106
+ 346 009a E360     		str	r3, [r4, #12]
+ 138:Src/tm_stm32f4_timer_properties.c **** 		
+ 347              		.loc 1 138 3 is_stmt 1 view .LVU107
+ 138:Src/tm_stm32f4_timer_properties.c **** 		
+ 348              		.loc 1 138 25 is_stmt 0 view .LVU108
+ 349 009c 6361     		str	r3, [r4, #20]
+ 141:Src/tm_stm32f4_timer_properties.c **** 	}
+ 350              		.loc 1 141 3 is_stmt 1 view .LVU109
+ 141:Src/tm_stm32f4_timer_properties.c **** 	}
+ 351              		.loc 1 141 10 is_stmt 0 view .LVU110
+ 352 009e 0420     		movs	r0, #4
+ 353 00a0 EBE7     		b	.L15
+ 354              		.cfi_endproc
+ 355              	.LFE131:
+ 357              		.section	.text.TM_TIMER_PROPERTIES_EnableClock,"ax",%progbits
+ 358              		.align	1
+ 359              		.global	TM_TIMER_PROPERTIES_EnableClock
+ 360              		.syntax unified
+ 361              		.thumb
+ 362              		.thumb_func
+ 363              		.fpu fpv4-sp-d16
+ 365              	TM_TIMER_PROPERTIES_EnableClock:
+ 366              	.LVL14:
+ 367              	.LFB132:
+ 150:Src/tm_stm32f4_timer_properties.c **** 
+ 151:Src/tm_stm32f4_timer_properties.c **** TM_TIMER_PROPERTIES_Result_t TM_TIMER_PROPERTIES_EnableClock(TIM_TypeDef* TIMx) {
+ 368              		.loc 1 151 81 is_stmt 1 view -0
+ 369              		.cfi_startproc
+ 370              		@ args = 0, pretend = 0, frame = 0
+ 371              		@ frame_needed = 0, uses_anonymous_args = 0
+ 372              		@ link register save eliminated.
+ 152:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM1
+ 153:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM1) {
+ 373              		.loc 1 153 2 view .LVU112
+ 374              		.loc 1 153 5 is_stmt 0 view .LVU113
+ 375 0000 3F4B     		ldr	r3, .L59
+ 376 0002 9842     		cmp	r0, r3
+ 377 0004 28D0     		beq	.L45
+ARM GAS  /tmp/ccK1PnFl.s 			page 11
+
+
+ 378              	.L31:
+ 154:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
+ 155:Src/tm_stm32f4_timer_properties.c **** 	}
+ 156:Src/tm_stm32f4_timer_properties.c **** #endif
+ 157:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM2
+ 158:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM2) {
+ 379              		.loc 1 158 2 is_stmt 1 view .LVU114
+ 380              		.loc 1 158 5 is_stmt 0 view .LVU115
+ 381 0006 B0F1804F 		cmp	r0, #1073741824
+ 382 000a 2BD0     		beq	.L46
+ 383              	.L32:
+ 159:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+ 160:Src/tm_stm32f4_timer_properties.c **** 	}
+ 161:Src/tm_stm32f4_timer_properties.c **** #endif
+ 162:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM3
+ 163:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM3) {
+ 384              		.loc 1 163 2 is_stmt 1 view .LVU116
+ 385              		.loc 1 163 5 is_stmt 0 view .LVU117
+ 386 000c 3D4B     		ldr	r3, .L59+4
+ 387 000e 9842     		cmp	r0, r3
+ 388 0010 2ED0     		beq	.L47
+ 389              	.L33:
+ 164:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+ 165:Src/tm_stm32f4_timer_properties.c **** 	}
+ 166:Src/tm_stm32f4_timer_properties.c **** #endif
+ 167:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM4
+ 168:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM4) {
+ 390              		.loc 1 168 2 is_stmt 1 view .LVU118
+ 391              		.loc 1 168 5 is_stmt 0 view .LVU119
+ 392 0012 3D4B     		ldr	r3, .L59+8
+ 393 0014 9842     		cmp	r0, r3
+ 394 0016 31D0     		beq	.L48
+ 395              	.L34:
+ 169:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+ 170:Src/tm_stm32f4_timer_properties.c **** 	}
+ 171:Src/tm_stm32f4_timer_properties.c **** #endif
+ 172:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM5
+ 173:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM5) {
+ 396              		.loc 1 173 2 is_stmt 1 view .LVU120
+ 397              		.loc 1 173 5 is_stmt 0 view .LVU121
+ 398 0018 3C4B     		ldr	r3, .L59+12
+ 399 001a 9842     		cmp	r0, r3
+ 400 001c 34D0     		beq	.L49
+ 401              	.L35:
+ 174:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;
+ 175:Src/tm_stm32f4_timer_properties.c **** 	}
+ 176:Src/tm_stm32f4_timer_properties.c **** #endif
+ 177:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM6
+ 178:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM6) {
+ 402              		.loc 1 178 2 is_stmt 1 view .LVU122
+ 403              		.loc 1 178 5 is_stmt 0 view .LVU123
+ 404 001e 3C4B     		ldr	r3, .L59+16
+ 405 0020 9842     		cmp	r0, r3
+ 406 0022 37D0     		beq	.L50
+ 407              	.L36:
+ 179:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
+ 180:Src/tm_stm32f4_timer_properties.c **** 	}
+ARM GAS  /tmp/ccK1PnFl.s 			page 12
+
+
+ 181:Src/tm_stm32f4_timer_properties.c **** #endif
+ 182:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM7
+ 183:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM7) {
+ 408              		.loc 1 183 2 is_stmt 1 view .LVU124
+ 409              		.loc 1 183 5 is_stmt 0 view .LVU125
+ 410 0024 3B4B     		ldr	r3, .L59+20
+ 411 0026 9842     		cmp	r0, r3
+ 412 0028 3AD0     		beq	.L51
+ 413              	.L37:
+ 184:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM7EN;
+ 185:Src/tm_stm32f4_timer_properties.c **** 	}
+ 186:Src/tm_stm32f4_timer_properties.c **** #endif
+ 187:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM8
+ 188:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM8) {
+ 414              		.loc 1 188 2 is_stmt 1 view .LVU126
+ 415              		.loc 1 188 5 is_stmt 0 view .LVU127
+ 416 002a 3B4B     		ldr	r3, .L59+24
+ 417 002c 9842     		cmp	r0, r3
+ 418 002e 3DD0     		beq	.L52
+ 419              	.L38:
+ 189:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR |= RCC_APB2ENR_TIM8EN;
+ 190:Src/tm_stm32f4_timer_properties.c **** 	}
+ 191:Src/tm_stm32f4_timer_properties.c **** #endif
+ 192:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM9
+ 193:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM9) {
+ 420              		.loc 1 193 2 is_stmt 1 view .LVU128
+ 421              		.loc 1 193 5 is_stmt 0 view .LVU129
+ 422 0030 3A4B     		ldr	r3, .L59+28
+ 423 0032 9842     		cmp	r0, r3
+ 424 0034 40D0     		beq	.L53
+ 425              	.L39:
+ 194:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR |= RCC_APB2ENR_TIM9EN;
+ 195:Src/tm_stm32f4_timer_properties.c **** 	}
+ 196:Src/tm_stm32f4_timer_properties.c **** #endif
+ 197:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM10
+ 198:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM10) {
+ 426              		.loc 1 198 2 is_stmt 1 view .LVU130
+ 427              		.loc 1 198 5 is_stmt 0 view .LVU131
+ 428 0036 3A4B     		ldr	r3, .L59+32
+ 429 0038 9842     		cmp	r0, r3
+ 430 003a 43D0     		beq	.L54
+ 431              	.L40:
+ 199:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR |= RCC_APB2ENR_TIM10EN;
+ 200:Src/tm_stm32f4_timer_properties.c **** 	}
+ 201:Src/tm_stm32f4_timer_properties.c **** #endif
+ 202:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM11
+ 203:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM11) {
+ 432              		.loc 1 203 2 is_stmt 1 view .LVU132
+ 433              		.loc 1 203 5 is_stmt 0 view .LVU133
+ 434 003c 394B     		ldr	r3, .L59+36
+ 435 003e 9842     		cmp	r0, r3
+ 436 0040 46D0     		beq	.L55
+ 437              	.L41:
+ 204:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR |= RCC_APB2ENR_TIM11EN;
+ 205:Src/tm_stm32f4_timer_properties.c **** 	}
+ 206:Src/tm_stm32f4_timer_properties.c **** #endif
+ 207:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM12
+ARM GAS  /tmp/ccK1PnFl.s 			page 13
+
+
+ 208:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM12) {
+ 438              		.loc 1 208 2 is_stmt 1 view .LVU134
+ 439              		.loc 1 208 5 is_stmt 0 view .LVU135
+ 440 0042 394B     		ldr	r3, .L59+40
+ 441 0044 9842     		cmp	r0, r3
+ 442 0046 49D0     		beq	.L56
+ 443              	.L42:
+ 209:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM12EN;
+ 210:Src/tm_stm32f4_timer_properties.c **** 	}
+ 211:Src/tm_stm32f4_timer_properties.c **** #endif
+ 212:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM13
+ 213:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM13) {
+ 444              		.loc 1 213 2 is_stmt 1 view .LVU136
+ 445              		.loc 1 213 5 is_stmt 0 view .LVU137
+ 446 0048 384B     		ldr	r3, .L59+44
+ 447 004a 9842     		cmp	r0, r3
+ 448 004c 4CD0     		beq	.L57
+ 449              	.L43:
+ 214:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM13EN;
+ 215:Src/tm_stm32f4_timer_properties.c **** 	}
+ 216:Src/tm_stm32f4_timer_properties.c **** #endif
+ 217:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM14
+ 218:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM14) {
+ 450              		.loc 1 218 2 is_stmt 1 view .LVU138
+ 451              		.loc 1 218 5 is_stmt 0 view .LVU139
+ 452 004e 384B     		ldr	r3, .L59+48
+ 453 0050 9842     		cmp	r0, r3
+ 454 0052 4FD0     		beq	.L58
+ 455              	.L44:
+ 219:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR |= RCC_APB1ENR_TIM14EN;
+ 220:Src/tm_stm32f4_timer_properties.c **** 	}
+ 221:Src/tm_stm32f4_timer_properties.c **** #endif
+ 222:Src/tm_stm32f4_timer_properties.c **** 	
+ 223:Src/tm_stm32f4_timer_properties.c **** 	/* Return OK */
+ 224:Src/tm_stm32f4_timer_properties.c **** 	return TM_TIMER_PROPERTIES_Result_Ok;
+ 456              		.loc 1 224 2 is_stmt 1 view .LVU140
+ 225:Src/tm_stm32f4_timer_properties.c **** }
+ 457              		.loc 1 225 1 is_stmt 0 view .LVU141
+ 458 0054 0020     		movs	r0, #0
+ 459              	.LVL15:
+ 460              		.loc 1 225 1 view .LVU142
+ 461 0056 7047     		bx	lr
+ 462              	.LVL16:
+ 463              	.L45:
+ 154:Src/tm_stm32f4_timer_properties.c **** 	}
+ 464              		.loc 1 154 3 is_stmt 1 view .LVU143
+ 154:Src/tm_stm32f4_timer_properties.c **** 	}
+ 465              		.loc 1 154 16 is_stmt 0 view .LVU144
+ 466 0058 364A     		ldr	r2, .L59+52
+ 467 005a 536C     		ldr	r3, [r2, #68]
+ 468 005c 43F00103 		orr	r3, r3, #1
+ 469 0060 5364     		str	r3, [r2, #68]
+ 470 0062 D0E7     		b	.L31
+ 471              	.L46:
+ 159:Src/tm_stm32f4_timer_properties.c **** 	}
+ 472              		.loc 1 159 3 is_stmt 1 view .LVU145
+ 159:Src/tm_stm32f4_timer_properties.c **** 	}
+ARM GAS  /tmp/ccK1PnFl.s 			page 14
+
+
+ 473              		.loc 1 159 16 is_stmt 0 view .LVU146
+ 474 0064 334A     		ldr	r2, .L59+52
+ 475 0066 136C     		ldr	r3, [r2, #64]
+ 476 0068 43F00103 		orr	r3, r3, #1
+ 477 006c 1364     		str	r3, [r2, #64]
+ 478 006e CDE7     		b	.L32
+ 479              	.L47:
+ 164:Src/tm_stm32f4_timer_properties.c **** 	}
+ 480              		.loc 1 164 3 is_stmt 1 view .LVU147
+ 164:Src/tm_stm32f4_timer_properties.c **** 	}
+ 481              		.loc 1 164 16 is_stmt 0 view .LVU148
+ 482 0070 304A     		ldr	r2, .L59+52
+ 483 0072 136C     		ldr	r3, [r2, #64]
+ 484 0074 43F00203 		orr	r3, r3, #2
+ 485 0078 1364     		str	r3, [r2, #64]
+ 486 007a CAE7     		b	.L33
+ 487              	.L48:
+ 169:Src/tm_stm32f4_timer_properties.c **** 	}
+ 488              		.loc 1 169 3 is_stmt 1 view .LVU149
+ 169:Src/tm_stm32f4_timer_properties.c **** 	}
+ 489              		.loc 1 169 16 is_stmt 0 view .LVU150
+ 490 007c 2D4A     		ldr	r2, .L59+52
+ 491 007e 136C     		ldr	r3, [r2, #64]
+ 492 0080 43F00403 		orr	r3, r3, #4
+ 493 0084 1364     		str	r3, [r2, #64]
+ 494 0086 C7E7     		b	.L34
+ 495              	.L49:
+ 174:Src/tm_stm32f4_timer_properties.c **** 	}
+ 496              		.loc 1 174 3 is_stmt 1 view .LVU151
+ 174:Src/tm_stm32f4_timer_properties.c **** 	}
+ 497              		.loc 1 174 16 is_stmt 0 view .LVU152
+ 498 0088 2A4A     		ldr	r2, .L59+52
+ 499 008a 136C     		ldr	r3, [r2, #64]
+ 500 008c 43F00803 		orr	r3, r3, #8
+ 501 0090 1364     		str	r3, [r2, #64]
+ 502 0092 C4E7     		b	.L35
+ 503              	.L50:
+ 179:Src/tm_stm32f4_timer_properties.c **** 	}
+ 504              		.loc 1 179 3 is_stmt 1 view .LVU153
+ 179:Src/tm_stm32f4_timer_properties.c **** 	}
+ 505              		.loc 1 179 16 is_stmt 0 view .LVU154
+ 506 0094 274A     		ldr	r2, .L59+52
+ 507 0096 136C     		ldr	r3, [r2, #64]
+ 508 0098 43F01003 		orr	r3, r3, #16
+ 509 009c 1364     		str	r3, [r2, #64]
+ 510 009e C1E7     		b	.L36
+ 511              	.L51:
+ 184:Src/tm_stm32f4_timer_properties.c **** 	}
+ 512              		.loc 1 184 3 is_stmt 1 view .LVU155
+ 184:Src/tm_stm32f4_timer_properties.c **** 	}
+ 513              		.loc 1 184 16 is_stmt 0 view .LVU156
+ 514 00a0 244A     		ldr	r2, .L59+52
+ 515 00a2 136C     		ldr	r3, [r2, #64]
+ 516 00a4 43F02003 		orr	r3, r3, #32
+ 517 00a8 1364     		str	r3, [r2, #64]
+ 518 00aa BEE7     		b	.L37
+ 519              	.L52:
+ARM GAS  /tmp/ccK1PnFl.s 			page 15
+
+
+ 189:Src/tm_stm32f4_timer_properties.c **** 	}
+ 520              		.loc 1 189 3 is_stmt 1 view .LVU157
+ 189:Src/tm_stm32f4_timer_properties.c **** 	}
+ 521              		.loc 1 189 16 is_stmt 0 view .LVU158
+ 522 00ac 214A     		ldr	r2, .L59+52
+ 523 00ae 536C     		ldr	r3, [r2, #68]
+ 524 00b0 43F00203 		orr	r3, r3, #2
+ 525 00b4 5364     		str	r3, [r2, #68]
+ 526 00b6 BBE7     		b	.L38
+ 527              	.L53:
+ 194:Src/tm_stm32f4_timer_properties.c **** 	}
+ 528              		.loc 1 194 3 is_stmt 1 view .LVU159
+ 194:Src/tm_stm32f4_timer_properties.c **** 	}
+ 529              		.loc 1 194 16 is_stmt 0 view .LVU160
+ 530 00b8 1E4A     		ldr	r2, .L59+52
+ 531 00ba 536C     		ldr	r3, [r2, #68]
+ 532 00bc 43F48033 		orr	r3, r3, #65536
+ 533 00c0 5364     		str	r3, [r2, #68]
+ 534 00c2 B8E7     		b	.L39
+ 535              	.L54:
+ 199:Src/tm_stm32f4_timer_properties.c **** 	}
+ 536              		.loc 1 199 3 is_stmt 1 view .LVU161
+ 199:Src/tm_stm32f4_timer_properties.c **** 	}
+ 537              		.loc 1 199 16 is_stmt 0 view .LVU162
+ 538 00c4 1B4A     		ldr	r2, .L59+52
+ 539 00c6 536C     		ldr	r3, [r2, #68]
+ 540 00c8 43F40033 		orr	r3, r3, #131072
+ 541 00cc 5364     		str	r3, [r2, #68]
+ 542 00ce B5E7     		b	.L40
+ 543              	.L55:
+ 204:Src/tm_stm32f4_timer_properties.c **** 	}
+ 544              		.loc 1 204 3 is_stmt 1 view .LVU163
+ 204:Src/tm_stm32f4_timer_properties.c **** 	}
+ 545              		.loc 1 204 16 is_stmt 0 view .LVU164
+ 546 00d0 184A     		ldr	r2, .L59+52
+ 547 00d2 536C     		ldr	r3, [r2, #68]
+ 548 00d4 43F48023 		orr	r3, r3, #262144
+ 549 00d8 5364     		str	r3, [r2, #68]
+ 550 00da B2E7     		b	.L41
+ 551              	.L56:
+ 209:Src/tm_stm32f4_timer_properties.c **** 	}
+ 552              		.loc 1 209 3 is_stmt 1 view .LVU165
+ 209:Src/tm_stm32f4_timer_properties.c **** 	}
+ 553              		.loc 1 209 16 is_stmt 0 view .LVU166
+ 554 00dc 154A     		ldr	r2, .L59+52
+ 555 00de 136C     		ldr	r3, [r2, #64]
+ 556 00e0 43F04003 		orr	r3, r3, #64
+ 557 00e4 1364     		str	r3, [r2, #64]
+ 558 00e6 AFE7     		b	.L42
+ 559              	.L57:
+ 214:Src/tm_stm32f4_timer_properties.c **** 	}
+ 560              		.loc 1 214 3 is_stmt 1 view .LVU167
+ 214:Src/tm_stm32f4_timer_properties.c **** 	}
+ 561              		.loc 1 214 16 is_stmt 0 view .LVU168
+ 562 00e8 124A     		ldr	r2, .L59+52
+ 563 00ea 136C     		ldr	r3, [r2, #64]
+ 564 00ec 43F08003 		orr	r3, r3, #128
+ARM GAS  /tmp/ccK1PnFl.s 			page 16
+
+
+ 565 00f0 1364     		str	r3, [r2, #64]
+ 566 00f2 ACE7     		b	.L43
+ 567              	.L58:
+ 219:Src/tm_stm32f4_timer_properties.c **** 	}
+ 568              		.loc 1 219 3 is_stmt 1 view .LVU169
+ 219:Src/tm_stm32f4_timer_properties.c **** 	}
+ 569              		.loc 1 219 16 is_stmt 0 view .LVU170
+ 570 00f4 0F4A     		ldr	r2, .L59+52
+ 571 00f6 136C     		ldr	r3, [r2, #64]
+ 572 00f8 43F48073 		orr	r3, r3, #256
+ 573 00fc 1364     		str	r3, [r2, #64]
+ 574 00fe A9E7     		b	.L44
+ 575              	.L60:
+ 576              		.align	2
+ 577              	.L59:
+ 578 0100 00000140 		.word	1073807360
+ 579 0104 00040040 		.word	1073742848
+ 580 0108 00080040 		.word	1073743872
+ 581 010c 000C0040 		.word	1073744896
+ 582 0110 00100040 		.word	1073745920
+ 583 0114 00140040 		.word	1073746944
+ 584 0118 00040140 		.word	1073808384
+ 585 011c 00400140 		.word	1073823744
+ 586 0120 00440140 		.word	1073824768
+ 587 0124 00480140 		.word	1073825792
+ 588 0128 00180040 		.word	1073747968
+ 589 012c 001C0040 		.word	1073748992
+ 590 0130 00200040 		.word	1073750016
+ 591 0134 00380240 		.word	1073887232
+ 592              		.cfi_endproc
+ 593              	.LFE132:
+ 595              		.section	.text.TM_TIMER_PROPERTIES_DisableClock,"ax",%progbits
+ 596              		.align	1
+ 597              		.global	TM_TIMER_PROPERTIES_DisableClock
+ 598              		.syntax unified
+ 599              		.thumb
+ 600              		.thumb_func
+ 601              		.fpu fpv4-sp-d16
+ 603              	TM_TIMER_PROPERTIES_DisableClock:
+ 604              	.LVL17:
+ 605              	.LFB133:
+ 226:Src/tm_stm32f4_timer_properties.c **** 
+ 227:Src/tm_stm32f4_timer_properties.c **** TM_TIMER_PROPERTIES_Result_t TM_TIMER_PROPERTIES_DisableClock(TIM_TypeDef* TIMx) {
+ 606              		.loc 1 227 82 is_stmt 1 view -0
+ 607              		.cfi_startproc
+ 608              		@ args = 0, pretend = 0, frame = 0
+ 609              		@ frame_needed = 0, uses_anonymous_args = 0
+ 610              		@ link register save eliminated.
+ 228:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM1
+ 229:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM1) {
+ 611              		.loc 1 229 2 view .LVU172
+ 612              		.loc 1 229 5 is_stmt 0 view .LVU173
+ 613 0000 3F4B     		ldr	r3, .L90
+ 614 0002 9842     		cmp	r0, r3
+ 615 0004 28D0     		beq	.L76
+ 616              	.L62:
+ 230:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN;
+ARM GAS  /tmp/ccK1PnFl.s 			page 17
+
+
+ 231:Src/tm_stm32f4_timer_properties.c **** 	}
+ 232:Src/tm_stm32f4_timer_properties.c **** #endif
+ 233:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM2
+ 234:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM2) {
+ 617              		.loc 1 234 2 is_stmt 1 view .LVU174
+ 618              		.loc 1 234 5 is_stmt 0 view .LVU175
+ 619 0006 B0F1804F 		cmp	r0, #1073741824
+ 620 000a 2BD0     		beq	.L77
+ 621              	.L63:
+ 235:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM2EN;
+ 236:Src/tm_stm32f4_timer_properties.c **** 	}
+ 237:Src/tm_stm32f4_timer_properties.c **** #endif
+ 238:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM3
+ 239:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM3) {
+ 622              		.loc 1 239 2 is_stmt 1 view .LVU176
+ 623              		.loc 1 239 5 is_stmt 0 view .LVU177
+ 624 000c 3D4B     		ldr	r3, .L90+4
+ 625 000e 9842     		cmp	r0, r3
+ 626 0010 2ED0     		beq	.L78
+ 627              	.L64:
+ 240:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM3EN;
+ 241:Src/tm_stm32f4_timer_properties.c **** 	}
+ 242:Src/tm_stm32f4_timer_properties.c **** #endif
+ 243:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM4
+ 244:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM4) {
+ 628              		.loc 1 244 2 is_stmt 1 view .LVU178
+ 629              		.loc 1 244 5 is_stmt 0 view .LVU179
+ 630 0012 3D4B     		ldr	r3, .L90+8
+ 631 0014 9842     		cmp	r0, r3
+ 632 0016 31D0     		beq	.L79
+ 633              	.L65:
+ 245:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM4EN;
+ 246:Src/tm_stm32f4_timer_properties.c **** 	}
+ 247:Src/tm_stm32f4_timer_properties.c **** #endif
+ 248:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM5
+ 249:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM5) {
+ 634              		.loc 1 249 2 is_stmt 1 view .LVU180
+ 635              		.loc 1 249 5 is_stmt 0 view .LVU181
+ 636 0018 3C4B     		ldr	r3, .L90+12
+ 637 001a 9842     		cmp	r0, r3
+ 638 001c 34D0     		beq	.L80
+ 639              	.L66:
+ 250:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM5EN;
+ 251:Src/tm_stm32f4_timer_properties.c **** 	}
+ 252:Src/tm_stm32f4_timer_properties.c **** #endif
+ 253:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM6
+ 254:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM6) {
+ 640              		.loc 1 254 2 is_stmt 1 view .LVU182
+ 641              		.loc 1 254 5 is_stmt 0 view .LVU183
+ 642 001e 3C4B     		ldr	r3, .L90+16
+ 643 0020 9842     		cmp	r0, r3
+ 644 0022 37D0     		beq	.L81
+ 645              	.L67:
+ 255:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM6EN;
+ 256:Src/tm_stm32f4_timer_properties.c **** 	}
+ 257:Src/tm_stm32f4_timer_properties.c **** #endif
+ 258:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM7
+ARM GAS  /tmp/ccK1PnFl.s 			page 18
+
+
+ 259:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM7) {
+ 646              		.loc 1 259 2 is_stmt 1 view .LVU184
+ 647              		.loc 1 259 5 is_stmt 0 view .LVU185
+ 648 0024 3B4B     		ldr	r3, .L90+20
+ 649 0026 9842     		cmp	r0, r3
+ 650 0028 3AD0     		beq	.L82
+ 651              	.L68:
+ 260:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM7EN;
+ 261:Src/tm_stm32f4_timer_properties.c **** 	}
+ 262:Src/tm_stm32f4_timer_properties.c **** #endif
+ 263:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM8
+ 264:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM8) {
+ 652              		.loc 1 264 2 is_stmt 1 view .LVU186
+ 653              		.loc 1 264 5 is_stmt 0 view .LVU187
+ 654 002a 3B4B     		ldr	r3, .L90+24
+ 655 002c 9842     		cmp	r0, r3
+ 656 002e 3DD0     		beq	.L83
+ 657              	.L69:
+ 265:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR &= ~RCC_APB2ENR_TIM8EN;
+ 266:Src/tm_stm32f4_timer_properties.c **** 	}
+ 267:Src/tm_stm32f4_timer_properties.c **** #endif
+ 268:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM9
+ 269:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM9) {
+ 658              		.loc 1 269 2 is_stmt 1 view .LVU188
+ 659              		.loc 1 269 5 is_stmt 0 view .LVU189
+ 660 0030 3A4B     		ldr	r3, .L90+28
+ 661 0032 9842     		cmp	r0, r3
+ 662 0034 40D0     		beq	.L84
+ 663              	.L70:
+ 270:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR &= ~RCC_APB2ENR_TIM9EN;
+ 271:Src/tm_stm32f4_timer_properties.c **** 	}
+ 272:Src/tm_stm32f4_timer_properties.c **** #endif
+ 273:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM10
+ 274:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM10) {
+ 664              		.loc 1 274 2 is_stmt 1 view .LVU190
+ 665              		.loc 1 274 5 is_stmt 0 view .LVU191
+ 666 0036 3A4B     		ldr	r3, .L90+32
+ 667 0038 9842     		cmp	r0, r3
+ 668 003a 43D0     		beq	.L85
+ 669              	.L71:
+ 275:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR &= ~RCC_APB2ENR_TIM10EN;
+ 276:Src/tm_stm32f4_timer_properties.c **** 	}
+ 277:Src/tm_stm32f4_timer_properties.c **** #endif
+ 278:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM11
+ 279:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM11) {
+ 670              		.loc 1 279 2 is_stmt 1 view .LVU192
+ 671              		.loc 1 279 5 is_stmt 0 view .LVU193
+ 672 003c 394B     		ldr	r3, .L90+36
+ 673 003e 9842     		cmp	r0, r3
+ 674 0040 46D0     		beq	.L86
+ 675              	.L72:
+ 280:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB2ENR &= ~RCC_APB2ENR_TIM11EN;
+ 281:Src/tm_stm32f4_timer_properties.c **** 	}
+ 282:Src/tm_stm32f4_timer_properties.c **** #endif
+ 283:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM12
+ 284:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM12) {
+ 676              		.loc 1 284 2 is_stmt 1 view .LVU194
+ARM GAS  /tmp/ccK1PnFl.s 			page 19
+
+
+ 677              		.loc 1 284 5 is_stmt 0 view .LVU195
+ 678 0042 394B     		ldr	r3, .L90+40
+ 679 0044 9842     		cmp	r0, r3
+ 680 0046 49D0     		beq	.L87
+ 681              	.L73:
+ 285:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM12EN;
+ 286:Src/tm_stm32f4_timer_properties.c **** 	}
+ 287:Src/tm_stm32f4_timer_properties.c **** #endif
+ 288:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM13
+ 289:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM13) {
+ 682              		.loc 1 289 2 is_stmt 1 view .LVU196
+ 683              		.loc 1 289 5 is_stmt 0 view .LVU197
+ 684 0048 384B     		ldr	r3, .L90+44
+ 685 004a 9842     		cmp	r0, r3
+ 686 004c 4CD0     		beq	.L88
+ 687              	.L74:
+ 290:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM13EN;
+ 291:Src/tm_stm32f4_timer_properties.c **** 	}
+ 292:Src/tm_stm32f4_timer_properties.c **** #endif
+ 293:Src/tm_stm32f4_timer_properties.c **** #ifdef TIM14
+ 294:Src/tm_stm32f4_timer_properties.c **** 	if (TIMx == TIM14) {
+ 688              		.loc 1 294 2 is_stmt 1 view .LVU198
+ 689              		.loc 1 294 5 is_stmt 0 view .LVU199
+ 690 004e 384B     		ldr	r3, .L90+48
+ 691 0050 9842     		cmp	r0, r3
+ 692 0052 4FD0     		beq	.L89
+ 693              	.L75:
+ 295:Src/tm_stm32f4_timer_properties.c **** 		RCC->APB1ENR &= ~RCC_APB1ENR_TIM14EN;
+ 296:Src/tm_stm32f4_timer_properties.c **** 	}
+ 297:Src/tm_stm32f4_timer_properties.c **** #endif
+ 298:Src/tm_stm32f4_timer_properties.c **** 	
+ 299:Src/tm_stm32f4_timer_properties.c **** 	/* Return OK */
+ 300:Src/tm_stm32f4_timer_properties.c **** 	return TM_TIMER_PROPERTIES_Result_Ok;
+ 694              		.loc 1 300 2 is_stmt 1 view .LVU200
+ 301:Src/tm_stm32f4_timer_properties.c **** }
+ 695              		.loc 1 301 1 is_stmt 0 view .LVU201
+ 696 0054 0020     		movs	r0, #0
+ 697              	.LVL18:
+ 698              		.loc 1 301 1 view .LVU202
+ 699 0056 7047     		bx	lr
+ 700              	.LVL19:
+ 701              	.L76:
+ 230:Src/tm_stm32f4_timer_properties.c **** 	}
+ 702              		.loc 1 230 3 is_stmt 1 view .LVU203
+ 230:Src/tm_stm32f4_timer_properties.c **** 	}
+ 703              		.loc 1 230 16 is_stmt 0 view .LVU204
+ 704 0058 364A     		ldr	r2, .L90+52
+ 705 005a 536C     		ldr	r3, [r2, #68]
+ 706 005c 23F00103 		bic	r3, r3, #1
+ 707 0060 5364     		str	r3, [r2, #68]
+ 708 0062 D0E7     		b	.L62
+ 709              	.L77:
+ 235:Src/tm_stm32f4_timer_properties.c **** 	}
+ 710              		.loc 1 235 3 is_stmt 1 view .LVU205
+ 235:Src/tm_stm32f4_timer_properties.c **** 	}
+ 711              		.loc 1 235 16 is_stmt 0 view .LVU206
+ 712 0064 334A     		ldr	r2, .L90+52
+ARM GAS  /tmp/ccK1PnFl.s 			page 20
+
+
+ 713 0066 136C     		ldr	r3, [r2, #64]
+ 714 0068 23F00103 		bic	r3, r3, #1
+ 715 006c 1364     		str	r3, [r2, #64]
+ 716 006e CDE7     		b	.L63
+ 717              	.L78:
+ 240:Src/tm_stm32f4_timer_properties.c **** 	}
+ 718              		.loc 1 240 3 is_stmt 1 view .LVU207
+ 240:Src/tm_stm32f4_timer_properties.c **** 	}
+ 719              		.loc 1 240 16 is_stmt 0 view .LVU208
+ 720 0070 304A     		ldr	r2, .L90+52
+ 721 0072 136C     		ldr	r3, [r2, #64]
+ 722 0074 23F00203 		bic	r3, r3, #2
+ 723 0078 1364     		str	r3, [r2, #64]
+ 724 007a CAE7     		b	.L64
+ 725              	.L79:
+ 245:Src/tm_stm32f4_timer_properties.c **** 	}
+ 726              		.loc 1 245 3 is_stmt 1 view .LVU209
+ 245:Src/tm_stm32f4_timer_properties.c **** 	}
+ 727              		.loc 1 245 16 is_stmt 0 view .LVU210
+ 728 007c 2D4A     		ldr	r2, .L90+52
+ 729 007e 136C     		ldr	r3, [r2, #64]
+ 730 0080 23F00403 		bic	r3, r3, #4
+ 731 0084 1364     		str	r3, [r2, #64]
+ 732 0086 C7E7     		b	.L65
+ 733              	.L80:
+ 250:Src/tm_stm32f4_timer_properties.c **** 	}
+ 734              		.loc 1 250 3 is_stmt 1 view .LVU211
+ 250:Src/tm_stm32f4_timer_properties.c **** 	}
+ 735              		.loc 1 250 16 is_stmt 0 view .LVU212
+ 736 0088 2A4A     		ldr	r2, .L90+52
+ 737 008a 136C     		ldr	r3, [r2, #64]
+ 738 008c 23F00803 		bic	r3, r3, #8
+ 739 0090 1364     		str	r3, [r2, #64]
+ 740 0092 C4E7     		b	.L66
+ 741              	.L81:
+ 255:Src/tm_stm32f4_timer_properties.c **** 	}
+ 742              		.loc 1 255 3 is_stmt 1 view .LVU213
+ 255:Src/tm_stm32f4_timer_properties.c **** 	}
+ 743              		.loc 1 255 16 is_stmt 0 view .LVU214
+ 744 0094 274A     		ldr	r2, .L90+52
+ 745 0096 136C     		ldr	r3, [r2, #64]
+ 746 0098 23F01003 		bic	r3, r3, #16
+ 747 009c 1364     		str	r3, [r2, #64]
+ 748 009e C1E7     		b	.L67
+ 749              	.L82:
+ 260:Src/tm_stm32f4_timer_properties.c **** 	}
+ 750              		.loc 1 260 3 is_stmt 1 view .LVU215
+ 260:Src/tm_stm32f4_timer_properties.c **** 	}
+ 751              		.loc 1 260 16 is_stmt 0 view .LVU216
+ 752 00a0 244A     		ldr	r2, .L90+52
+ 753 00a2 136C     		ldr	r3, [r2, #64]
+ 754 00a4 23F02003 		bic	r3, r3, #32
+ 755 00a8 1364     		str	r3, [r2, #64]
+ 756 00aa BEE7     		b	.L68
+ 757              	.L83:
+ 265:Src/tm_stm32f4_timer_properties.c **** 	}
+ 758              		.loc 1 265 3 is_stmt 1 view .LVU217
+ARM GAS  /tmp/ccK1PnFl.s 			page 21
+
+
+ 265:Src/tm_stm32f4_timer_properties.c **** 	}
+ 759              		.loc 1 265 16 is_stmt 0 view .LVU218
+ 760 00ac 214A     		ldr	r2, .L90+52
+ 761 00ae 536C     		ldr	r3, [r2, #68]
+ 762 00b0 23F00203 		bic	r3, r3, #2
+ 763 00b4 5364     		str	r3, [r2, #68]
+ 764 00b6 BBE7     		b	.L69
+ 765              	.L84:
+ 270:Src/tm_stm32f4_timer_properties.c **** 	}
+ 766              		.loc 1 270 3 is_stmt 1 view .LVU219
+ 270:Src/tm_stm32f4_timer_properties.c **** 	}
+ 767              		.loc 1 270 16 is_stmt 0 view .LVU220
+ 768 00b8 1E4A     		ldr	r2, .L90+52
+ 769 00ba 536C     		ldr	r3, [r2, #68]
+ 770 00bc 23F48033 		bic	r3, r3, #65536
+ 771 00c0 5364     		str	r3, [r2, #68]
+ 772 00c2 B8E7     		b	.L70
+ 773              	.L85:
+ 275:Src/tm_stm32f4_timer_properties.c **** 	}
+ 774              		.loc 1 275 3 is_stmt 1 view .LVU221
+ 275:Src/tm_stm32f4_timer_properties.c **** 	}
+ 775              		.loc 1 275 16 is_stmt 0 view .LVU222
+ 776 00c4 1B4A     		ldr	r2, .L90+52
+ 777 00c6 536C     		ldr	r3, [r2, #68]
+ 778 00c8 23F40033 		bic	r3, r3, #131072
+ 779 00cc 5364     		str	r3, [r2, #68]
+ 780 00ce B5E7     		b	.L71
+ 781              	.L86:
+ 280:Src/tm_stm32f4_timer_properties.c **** 	}
+ 782              		.loc 1 280 3 is_stmt 1 view .LVU223
+ 280:Src/tm_stm32f4_timer_properties.c **** 	}
+ 783              		.loc 1 280 16 is_stmt 0 view .LVU224
+ 784 00d0 184A     		ldr	r2, .L90+52
+ 785 00d2 536C     		ldr	r3, [r2, #68]
+ 786 00d4 23F48023 		bic	r3, r3, #262144
+ 787 00d8 5364     		str	r3, [r2, #68]
+ 788 00da B2E7     		b	.L72
+ 789              	.L87:
+ 285:Src/tm_stm32f4_timer_properties.c **** 	}
+ 790              		.loc 1 285 3 is_stmt 1 view .LVU225
+ 285:Src/tm_stm32f4_timer_properties.c **** 	}
+ 791              		.loc 1 285 16 is_stmt 0 view .LVU226
+ 792 00dc 154A     		ldr	r2, .L90+52
+ 793 00de 136C     		ldr	r3, [r2, #64]
+ 794 00e0 23F04003 		bic	r3, r3, #64
+ 795 00e4 1364     		str	r3, [r2, #64]
+ 796 00e6 AFE7     		b	.L73
+ 797              	.L88:
+ 290:Src/tm_stm32f4_timer_properties.c **** 	}
+ 798              		.loc 1 290 3 is_stmt 1 view .LVU227
+ 290:Src/tm_stm32f4_timer_properties.c **** 	}
+ 799              		.loc 1 290 16 is_stmt 0 view .LVU228
+ 800 00e8 124A     		ldr	r2, .L90+52
+ 801 00ea 136C     		ldr	r3, [r2, #64]
+ 802 00ec 23F08003 		bic	r3, r3, #128
+ 803 00f0 1364     		str	r3, [r2, #64]
+ 804 00f2 ACE7     		b	.L74
+ARM GAS  /tmp/ccK1PnFl.s 			page 22
+
+
+ 805              	.L89:
+ 295:Src/tm_stm32f4_timer_properties.c **** 	}
+ 806              		.loc 1 295 3 is_stmt 1 view .LVU229
+ 295:Src/tm_stm32f4_timer_properties.c **** 	}
+ 807              		.loc 1 295 16 is_stmt 0 view .LVU230
+ 808 00f4 0F4A     		ldr	r2, .L90+52
+ 809 00f6 136C     		ldr	r3, [r2, #64]
+ 810 00f8 23F48073 		bic	r3, r3, #256
+ 811 00fc 1364     		str	r3, [r2, #64]
+ 812 00fe A9E7     		b	.L75
+ 813              	.L91:
+ 814              		.align	2
+ 815              	.L90:
+ 816 0100 00000140 		.word	1073807360
+ 817 0104 00040040 		.word	1073742848
+ 818 0108 00080040 		.word	1073743872
+ 819 010c 000C0040 		.word	1073744896
+ 820 0110 00100040 		.word	1073745920
+ 821 0114 00140040 		.word	1073746944
+ 822 0118 00040140 		.word	1073808384
+ 823 011c 00400140 		.word	1073823744
+ 824 0120 00440140 		.word	1073824768
+ 825 0124 00480140 		.word	1073825792
+ 826 0128 00180040 		.word	1073747968
+ 827 012c 001C0040 		.word	1073748992
+ 828 0130 00200040 		.word	1073750016
+ 829 0134 00380240 		.word	1073887232
+ 830              		.cfi_endproc
+ 831              	.LFE133:
+ 833              		.text
+ 834              	.Letext0:
+ 835              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 836              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 837              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 838              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 839              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 840              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 841              		.file 8 "Inc/stm32f4xx_rcc.h"
+ 842              		.file 9 "Src/tm_stm32f4_timer_properties.h"
+ARM GAS  /tmp/ccK1PnFl.s 			page 23
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 tm_stm32f4_timer_properties.c
+     /tmp/ccK1PnFl.s:18     .text.TM_TIMER_PROPERTIES_GetTimerProperties:0000000000000000 $t
+     /tmp/ccK1PnFl.s:26     .text.TM_TIMER_PROPERTIES_GetTimerProperties:0000000000000000 TM_TIMER_PROPERTIES_GetTimerProperties
+     /tmp/ccK1PnFl.s:173    .text.TM_TIMER_PROPERTIES_GetTimerProperties:00000000000000ac $d
+     /tmp/ccK1PnFl.s:185    .text.TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency:0000000000000000 $t
+     /tmp/ccK1PnFl.s:192    .text.TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency:0000000000000000 TM_TIMER_PROPERTIES_GenerateDataForWorkingFrequency
+     /tmp/ccK1PnFl.s:358    .text.TM_TIMER_PROPERTIES_EnableClock:0000000000000000 $t
+     /tmp/ccK1PnFl.s:365    .text.TM_TIMER_PROPERTIES_EnableClock:0000000000000000 TM_TIMER_PROPERTIES_EnableClock
+     /tmp/ccK1PnFl.s:578    .text.TM_TIMER_PROPERTIES_EnableClock:0000000000000100 $d
+     /tmp/ccK1PnFl.s:596    .text.TM_TIMER_PROPERTIES_DisableClock:0000000000000000 $t
+     /tmp/ccK1PnFl.s:603    .text.TM_TIMER_PROPERTIES_DisableClock:0000000000000000 TM_TIMER_PROPERTIES_DisableClock
+     /tmp/ccK1PnFl.s:816    .text.TM_TIMER_PROPERTIES_DisableClock:0000000000000100 $d
+
+UNDEFINED SYMBOLS
+RCC_GetClocksFreq
+__aeabi_ui2d
+__aeabi_dcmplt
+__aeabi_dcmpeq
+__aeabi_ddiv
+__aeabi_d2uiz
